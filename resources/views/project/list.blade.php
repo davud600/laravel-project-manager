@@ -35,7 +35,7 @@
                         <a class="btn btn-primary" href="">View</a>
                     </td>
                 </tr>
-                @endfor
+                @endforeach
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->

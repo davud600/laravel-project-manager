@@ -28,18 +28,18 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'index');
     Route::get('/users/create', 'create');
     Route::post('/users/create', 'store');
-    Route::get('/users/{product}', 'show');
-    Route::get('/users/{product}/edit', 'edit');
-    Route::put('/users/{product}', 'update');
-    Route::delete('/users/{product}', 'destroy');
+    Route::get('/users/{id}', 'show');
+    Route::get('/users/{id}/edit', 'edit');
+    Route::put('/users/{id}', 'update');
+    Route::delete('/users/{id}', 'destroy');
 });
 
 Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects', 'index');
     Route::get('/projects/create', 'create');
     Route::post('/projects/create', 'store');
-    Route::get('/projects/{product}', 'show');
-    Route::get('/projects/{product}/edit', 'edit');
-    Route::put('/projects/{product}', 'update');
-    Route::delete('/projects/{product}', 'destroy');
+    Route::get('/projects/{id}', 'show');
+    Route::get('/projects/{id}/edit', 'edit');
+    Route::put('/projects/{id}', 'update');
+    Route::delete('/projects/{id}', 'destroy');
 });

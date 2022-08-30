@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between">
-    <h1 class="ms-3">Dashboard</h1>
+    <h1 class="">Dashboard</h1>
     <div>
         <a class="me-3 btn btn-outline-success mb-4" href="/projects/create">
             <span>Add Project</span>
@@ -28,6 +28,7 @@
                     <th scope="col">Title</th>
                     <th scope="col">Status</th>
                     <th scope="col">Estimated Time</th>
+                    <th scope="col">Created at</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -35,11 +36,16 @@
                 @foreach ($projects as $project)
                 <tr>
                     <td>{{ $project->title }}</td>
-                    <td>{{ $project->status }}</td>
+                    <td>
+                        {!! $project->status == 0 ?
+                        '<span class="badge bg-secondary">In Progress</span>':
+                        '<span class="badge bg-success">Finished</span>'
+                        !!}
+                    </td>
                     <td>{{ $project->estimated_time }}</td>
                     <td>{{ $project->created_at }}</td>
                     <td>
-                        <a class="btn btn-primary" href="">View</a>
+                        <a class="btn btn-primary" href="/projects/{{ $project->id }}">View</a>
                     </td>
                 </tr>
                 @endforeach
@@ -51,7 +57,7 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Employees</h5>
+        <h5 class="card-title">Employees Activity</h5>
 
         <!-- Table with hoverable rows -->
         <table class="table table-hover">
