@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->tinyInteger('status');
-            $table->integer('estimated_time');
+            $table->tinyInteger('status')->default(0);
+            $table->integer('estimated_time')->default(0);
             $table->integer('customer_id');
             $table->timestamps();
             $table->softDeletes();

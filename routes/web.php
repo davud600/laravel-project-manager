@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Pages;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,3 +42,5 @@ Route::controller(ProjectController::class)->group(function () {
     Route::put('/projects/{id}', 'update');
     Route::delete('/projects/{id}', 'destroy');
 });
+
+include __DIR__ . '/auth.php';

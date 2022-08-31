@@ -12,8 +12,6 @@ class AdminController extends Controller
         $projects = Project::all();
 
         return view('admin.dashboard', [
-            'username' => 'user',
-            'userrole' => 'admin',
             'projects' => $projects
         ]);
     }

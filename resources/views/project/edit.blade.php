@@ -5,6 +5,9 @@
 <li class="breadcrumb-item">
     <a href="/dashboard">Dashboard</a>
 </li>
+<li class="breadcrumb-item">
+    <a href="/projects/{{ $project->id }}">{{ $project->title }}</a>
+</li>
 <li class="breadcrumb-item active">Edit Project</li>
 @stop
 
@@ -25,7 +28,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-floating mb-3">
+                <div class="mb-3 form-floating">
                     <select name="customer" class="form-select" id="floatingSelect" aria-label="State">
                     </select>
                     <label for="floatingSelect">Customer</label>
@@ -39,8 +42,8 @@
             </div>
 
             <div class="col-md-3">
-                <label class="ms-2 mb-2 mt-3">Estimated Time</label>
-                <div class="d-flex gap-2">
+                <label class="mt-3 mb-2 ms-2">Estimated Time</label>
+                <div class="gap-2 d-flex">
                     <div class="form-floating w-75">
                         <input min="0" type="number" class="form-control" id="hours" name="hours" placeholder="Hours" value="{!! floor($project->estimated_time / 60) !!}">
                         <label for="hours">Hours</label>
@@ -53,7 +56,7 @@
             </div>
 
             <div class="col-md-12">
-                <div class="form-floating mb-3 mt-3 w-25">
+                <div class="mt-3 mb-3 form-floating w-25">
                     <select name="status" class="form-select" id="floatingSelect" aria-label="State">
                         <?php echo $project['status'] == 0 ?
                             '<option value="0" selected>In Progress</option>
@@ -67,17 +70,17 @@
             </div>
 
             <div class="col-md-12">
-                <label class="ms-2 mb-2 mt-3">Employees</label>
+                <label class="mt-3 mb-2 ms-2">Employees</label>
                 <div class="row" id="employees">
                     <div class="col-3">
-                        <button class="btn btn-outline-success w-100 text-start pb-3 pt-3" type="button" onclick="addEmployee()">
+                        <button class="pt-3 pb-3 btn btn-outline-success w-100 text-start" type="button" onclick="addEmployee()">
                             + Add Employee
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-5">
+            <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form><!-- End floating Labels Form -->
@@ -92,8 +95,8 @@
 
     function addEmployee() {
         inputtedEmployees.push($('#employees').append(`
-        <div class="col-3 mb-3">
-            <div class="form-floating m-0 relative mb-2">
+        <div class="mb-3 col-3">
+            <div class="relative m-0 mb-2 form-floating">
             <select name="employee${inputtedEmployees.length}" id="floatingSelect" class="form-select position-relative" aria-label="State">
                 @foreach ($all_employees as $employee)
                     <option value="<?= $employee['id'] ?>">
@@ -101,7 +104,7 @@
                     </option>
                 @endforeach
             </select>
-            <button class="bottom-0 btn ps-2 pe-2 pt-0 pb-0 position-absolute end-0 top-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
+            <button class="top-0 bottom-0 pt-0 pb-0 btn ps-2 pe-2 position-absolute end-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
             <label for="floatingSelect">Employee</label>
             </div>
         </div>`));
