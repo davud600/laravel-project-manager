@@ -38,9 +38,9 @@
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Employees</span>
                 <div>
-                    <?php foreach ($employees as $employee) { ?>
-                        <span><?= $employee['name'] ?>,</span>
-                    <?php } ?>
+                    @foreach ($employees as $employee)
+                    <span>{{ $employee->name }},&nbsp;&nbsp;</span>
+                    @endforeach
                 </div>
             </li>
             <li class="list-group-item d-flex justify-content-between">

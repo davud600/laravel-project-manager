@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-floating mb-3">
+                <div class="mb-3 form-floating">
                     <select name="customer" class="form-select" id="floatingSelect" aria-label="State">
                     </select>
                     <label for="floatingSelect">Customer</label>
@@ -38,8 +38,8 @@
             </div>
 
             <div class="col-md-3">
-                <label class="ms-2 mb-2 mt-3">Estimated Time</label>
-                <div class="d-flex gap-2">
+                <label class="mt-3 mb-2 ms-2">Estimated Time</label>
+                <div class="gap-2 d-flex">
                     <div class="form-floating w-75">
                         <input min="0" type="number" class="form-control" id="hours" name="hours" placeholder="Hours">
                         <label for="hours">Hours</label>
@@ -52,17 +52,17 @@
             </div>
 
             <div class="col-md-12">
-                <label class="ms-2 mb-2 mt-3">Employees</label>
+                <label class="mt-3 mb-2 ms-2">Employees</label>
                 <div class="row" id="employees">
-                    <div class="col-3">
-                        <button class="btn btn-outline-success w-100 text-start pb-3 pt-3" type="button" onclick="addEmployee()">
+                    <div class="gap-2 col-3">
+                        <button class="pt-3 pb-3 btn btn-outline-success w-100 text-start" type="button" onclick="addEmployee()">
                             + Add Employee
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-5">
+            <div class="mt-5 text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form><!-- End floating Labels Form -->
@@ -76,20 +76,35 @@
     var inputtedEmployees = [];
 
     function addEmployee() {
-        inputtedEmployees.push($('#employees').append(`
-        <div class="col-3 mb-3">
-            <div class="form-floating m-0 relative mb-2">
+        // var employeesEl = document.getElementById('employees');
+        // var container = document.createElement('div');
+        // container.className = 'mb-3 col-3';
+        // var smallerContainer = document.createElement('div');
+        // smallerContainer.className = 'relative m-0 mb-2 form-floating';
+        // var employeeSelect = document.createElement('select');
+        // employeeSelect.className = 'form-select position-relative';
+        // employeeSelect.setAttribute('id', 'floatingSelect');
+        // employeeSelect.setAttribute('name', `employee${inputtedEmployees.length}`);
+        // employeeSelect.setAttribute('aria-label', 'State');
+
+        const employeesElement = document.getElementById('employees');
+
+        employeesElement.innerHTML += `
+        <div class="mb-3 col-3">
+            <div class="relative m-0 mb-2 form-floating">
             <select name="employee${inputtedEmployees.length}" id="floatingSelect" class="form-select position-relative" aria-label="State">
                 @foreach ($employees as $employee)
-                    <option value="<?= $employee['id'] ?>">
-                        <?= $employee['name'] ?>
+                    <option value="{!! $employee['id'] !!}">
+                        {!! $employee['name'] !!}
                     </option>
                 @endforeach
             </select>
-            <button class="bottom-0 btn ps-2 pe-2 pt-0 pb-0 position-absolute end-0 top-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
+            <button class="top-0 bottom-0 pt-0 pb-0 btn ps-2 pe-2 position-absolute end-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
             <label for="floatingSelect">Employee</label>
             </div>
-        </div>`));
+        </div>`
+
+        inputtedEmployees.push(employeesElement);
     }
 
     function removeEmployee(event) {

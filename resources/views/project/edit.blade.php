@@ -77,6 +77,34 @@
                             + Add Employee
                         </button>
                     </div>
+
+                    @php
+                    $index = 0;
+                    @endphp
+                    @foreach ($projectEmployees as $employee)
+                    <div class="mb-3 col-3">
+                        <div class="relative m-0 mb-2 form-floating">
+                            <select name="employee{{ $index }}" id="floatingSelect" class="form-select position-relative" aria-label="State">
+                                @foreach ($allEmployees as $optionEmployee)
+                                @if ($optionEmployee->id == $employee->id)
+                                <option value="{{ $optionEmployee->id }}" selected>
+                                    {{ $optionEmployee->name }}
+                                </option>
+                                @else
+                                <option value="{{ $optionEmployee->id }}">
+                                    {{ $optionEmployee->name }}
+                                </option>
+                                @endif
+                                @endforeach
+                            </select>
+                            <button class="top-0 bottom-0 pt-0 pb-0 btn ps-2 pe-2 position-absolute end-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
+                            <label for="floatingSelect">Employee</label>
+                        </div>
+                    </div>
+                    @php
+                    $index++;
+                    @endphp
+                    @endforeach
                 </div>
             </div>
 
@@ -94,20 +122,32 @@
     var inputtedEmployees = [];
 
     function addEmployee() {
-        inputtedEmployees.push($('#employees').append(`
+        const employeesElement = document.getElementById('employees');
+
+        // get dom element employees
+        const prevChildren = document.getElementById('employees').children;
+
+        // loop through its children and add them in inputtedEmployees
+        for (let i = 0; i < prevChildren.length; i++) {
+            inputtedEmployees.push(prevChildren[i]);
+        }
+
+        employeesElement.innerHTML += `
         <div class="mb-3 col-3">
             <div class="relative m-0 mb-2 form-floating">
             <select name="employee${inputtedEmployees.length}" id="floatingSelect" class="form-select position-relative" aria-label="State">
-                @foreach ($all_employees as $employee)
-                    <option value="<?= $employee['id'] ?>">
-                        <?= $employee['name'] ?>
+                @foreach ($allEmployees as $employee)
+                    <option value="{!! $employee['id'] !!}">
+                        {!! $employee['name'] !!}
                     </option>
                 @endforeach
             </select>
             <button class="top-0 bottom-0 pt-0 pb-0 btn ps-2 pe-2 position-absolute end-0 bottom-50" type="button" onclick="removeEmployee(event)">x</button>
             <label for="floatingSelect">Employee</label>
             </div>
-        </div>`));
+        </div>`
+
+        inputtedEmployees.push(employeesElement);
     }
 
     function removeEmployee(event) {
