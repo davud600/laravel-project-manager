@@ -18,9 +18,11 @@ class projectController extends Controller
     public function create()
     {
         $employees = User::where('role', 1)->get();
+        $customers = User::where('role', 0)->get();
 
         return view('project.add', [
-            'employees' => $employees
+            'employees' => $employees,
+            'customers' => $customers
         ]);
     }
 
@@ -79,6 +81,8 @@ class projectController extends Controller
     {
         $project = Project::where('id', $project_id)->first();
         $allEmployees = User::where('role', 1)->get();
+        $projectCustomer = User::where('id', $project->customer_id)->first();
+        $customers = User::where('role', 0)->get();
 
         $projectEmployeesIds = ProjectEmployee::select('employee_id')
             ->where('project_id', $project_id)->get();
@@ -91,7 +95,9 @@ class projectController extends Controller
         return view('project.edit', [
             'project' => $project,
             'allEmployees' => $allEmployees,
-            'projectEmployees' => $projectEmployees
+            'projectEmployees' => $projectEmployees,
+            'customers' => $customers,
+            'projectCustomer' => $projectCustomer
         ]);
     }
 

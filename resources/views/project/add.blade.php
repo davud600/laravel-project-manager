@@ -26,6 +26,11 @@
             <div class="col-md-4">
                 <div class="mb-3 form-floating">
                     <select name="customer" class="form-select" id="floatingSelect" aria-label="State">
+                        @foreach ($customers as $customer)
+                        <option value="{{ $customer->id }}">
+                            {{ $customer->name }}
+                        </option>
+                        @endforeach
                     </select>
                     <label for="floatingSelect">Customer</label>
                 </div>
