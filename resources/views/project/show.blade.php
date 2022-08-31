@@ -45,7 +45,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Estimated Time</span>
-                <div class="form-group d-flex gap-3">
+                <div class="gap-3 form-group d-flex">
                     <span class="mt-2">
                         <?php
                         $hrs = floor($project['estimated_time'] / 60);
@@ -65,11 +65,72 @@
                 </div>
             </li>
 
-            <div class="d-flex justify-content-center mt-4">
+            <div class="mt-4 d-flex justify-content-center">
                 <a class="btn btn-secondary ps-4 pe-4" href="/projects/{{ $project->id }}/edit">Edit</a>
             </div>
         </ul><!-- End Default List group -->
 
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Project Requests</h5>
+
+        <!-- Table with hoverable rows -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">$project->id</th>
+                    <td>$project->title</td>
+                    <td>$project->status</td>
+                    <td>$project->estimated_time</td>
+                    <td>
+                        <a class="btn btn-primary" href="">View</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End Table with hoverable rows -->
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Project Employees Activity</h5>
+
+        <!-- Table with hoverable rows -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Employee</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Added at</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">$project->id</th>
+                    <td>$project->title</td>
+                    <td>$project->status</td>
+                    <td>$project->estimated_time</td>
+                    <td>a</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- End Table with hoverable rows -->
     </div>
 </div>
 @stop

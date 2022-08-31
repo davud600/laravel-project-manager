@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -21,32 +22,41 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $newUser = User::create([
-            'title' => $request->title,
-            'short_notes' => $request->short_notes,
-            'price' => $request->price
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role
         ]);
 
         return redirect('users/' . $newUser->id . '/edit');
     }
 
-    public function show(User $user)
+    public function show($user_id)
     {
-        //
+        $user = User::where('id', $user_id)->first();
+
+        return view('user.show', [
+            'user' => $user
+        ]);
     }
 
-    public function edit(User $user)
+    public function edit($user_id)
     {
+        $user = User::where('id', $user_id)->first();
+
         return view('user.edit', [
             'user' => $user,
         ]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user_id)
     {
+        $user = User::where('id', $user_id)->first();
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password
+            'password' => isset($request->password) ? Hash::make($request->password) : $user->password
         ]);
 
         return redirect('users/' . $user->id . '/edit');

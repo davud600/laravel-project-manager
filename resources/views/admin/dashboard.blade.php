@@ -9,11 +9,14 @@
 <div class="d-flex justify-content-between">
     <h1 class="">Dashboard</h1>
     <div>
-        <a class="me-3 btn btn-outline-success mb-4" href="/projects/create">
+        <a class="mb-4 me-3 btn btn-outline-primary" href="/users">
+            <span>Users</span>
+        </a>
+        <a class="mb-4 me-3 btn btn-outline-success" href="/projects/create">
             <span>Add Project</span>
         </a>
-        <a class="me-3 btn btn-outline-secondary mb-4" href="/projects/archive">
-            <span>View Archive</span>
+        <a class="mb-4 me-3 btn btn-outline-secondary" href="/projects/archive">
+            <span>Project Archive</span>
         </a>
     </div>
 </div>
@@ -71,18 +74,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($projects as $project)
                 <tr>
-                    <th scope="row">{{ $project->id }}</th>
-                    <td>{{ $project->title }}</td>
-                    <td>{{ $project->status }}</td>
-                    <td>{{ $project->estimated_time }}</td>
-                    <td>{{ $project->created_at }}</td>
+                    <th scope="row">$project->id</th>
+                    <td>$project->title</td>
+                    <td>$project->status</td>
+                    <td>$project->estimated_time</td>
                     <td>
                         <a class="btn btn-primary" href="">View</a>
                     </td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->

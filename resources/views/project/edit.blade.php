@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title'){{ $project->title }}@stop
+@section('title')Edit {{ $project->title }}@stop
 
 @section('links')
 <li class="breadcrumb-item">
@@ -8,7 +8,7 @@
 <li class="breadcrumb-item">
     <a href="/projects/{{ $project->id }}">{{ $project->title }}</a>
 </li>
-<li class="breadcrumb-item active">Edit Project</li>
+<li class="breadcrumb-item active">Update {{ $project->title }}</li>
 @stop
 
 @section('content')
