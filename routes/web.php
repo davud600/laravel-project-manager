@@ -20,6 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/profile', function () {
+    return view('user.profile');
+});
+
 Route::controller(AdminController::class)->group(function () {
     Route::get('/dashboard', 'dashboard');
 });
