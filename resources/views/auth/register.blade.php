@@ -42,6 +42,14 @@
                         </div>
 
                         <div class="col-12">
+                            <label for="yourCompany" class="form-label">Your Company</label>
+                            <input type="text" name="company" class="form-control" id="yourCompany" required />
+                            <div class="invalid-feedback">
+                                Enter your company name!
+                            </div>
+                        </div>
+
+                        <div class="col-12">
                             <label for="yourPassword" class="form-label">Password</label>
                             <input type="password" name="password" class="form-control" id="yourPassword" required />
                             <div class="invalid-feedback">

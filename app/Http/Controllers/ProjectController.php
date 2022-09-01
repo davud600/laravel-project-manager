@@ -164,15 +164,12 @@ class projectController extends Controller
         // del all initial employees if thers any
         $this->deleteAllEmployeesOfProject($project_id);
 
-        $project_employees = [];
         foreach ($employee_ids as $employee_id) {
-            array_push($project_employees, [
+            ProjectEmployee::create([
                 'project_id' => $project_id,
                 'employee_id' => $employee_id
             ]);
         }
-
-        ProjectEmployee::insert($project_employees);
     }
 
     private function deleteAllEmployeesOfProject($project_id)

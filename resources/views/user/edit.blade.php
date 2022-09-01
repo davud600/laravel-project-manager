@@ -30,12 +30,22 @@
                     <label for="floatingName">Your Name</label>
                 </div>
             </div>
+
             <div class="col-md-8">
                 <div class="form-floating">
                     <input type="email" name="email" class="form-control" id="floatingEmail" placeholder="Your Email" value="{{ $user->email }}" />
                     <label for="floatingEmail">Your Email</label>
                 </div>
             </div>
+
+            <div class="col-12">
+                <label for="yourCompany" class="form-label">Your Company</label>
+                <input type="text" name="company" class="form-control" id="yourCompany" value="{{ $user->company }}" />
+                <div class="invalid-feedback">
+                    Enter your company name!
+                </div>
+            </div>
+
             <div class="col-md-8">
                 <div class="form-floating">
                     <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Your New Password" />

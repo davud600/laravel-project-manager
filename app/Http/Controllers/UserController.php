@@ -25,6 +25,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'company' => $request->company,
             'role' => $request->role
         ]);
 
@@ -56,7 +57,9 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => isset($request->password) ? Hash::make($request->password) : $user->password
+            'password' => isset($request->password) ? Hash::make($request->password) : $user->password,
+            'company' => $request->company,
+            'role' => $request->role
         ]);
 
         return redirect('users/' . $user->id . '/edit');

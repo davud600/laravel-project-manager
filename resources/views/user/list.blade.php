@@ -29,6 +29,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
+                    <th scope="col">Company</th>
                     <th scope="col">Created At</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -44,6 +45,7 @@
                             $user->role == 0 ? 'Customer' : ($user->role == 1 ? 'Employee': 'Admin')
                         }}
                     </td>
+                    <td>{{ $user->company }}</td>
                     <td>{{ $user->created_at }}</td>
                     <td>
                         <a class="btn btn-primary" href="/users/{{ $user->id }}">View</a>

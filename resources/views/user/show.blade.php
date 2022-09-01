@@ -28,6 +28,10 @@
                 <span class="col-7 text-end">{{ $user->email }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-bold">Company</span>
+                <span class="col-7 text-end">{{ $user->company }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Role</span>
                 <span>
                     {{

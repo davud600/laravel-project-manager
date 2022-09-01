@@ -69,7 +69,7 @@
                     <th scope="col">Employee</th>
                     <th scope="col">Project</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Time</th>
+                    <th scope="col">Time added</th>
                     <th scope="col">Added at</th>
                 </tr>
             </thead>

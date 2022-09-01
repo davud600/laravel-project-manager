@@ -46,13 +46,13 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-3 col-md-4 label">Company</div>
-                            <div class="col-lg-9 col-md-8"></div>
+                            <div class="col-lg-3 col-md-4 label">Email</div>
+                            <div class="col-lg-9 col-md-8">{{ auth()->user()->email }}</div>
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-3 col-md-4 label">Email</div>
-                            <div class="col-lg-9 col-md-8">{{ auth()->user()->email }}</div>
+                            <div class="col-lg-3 col-md-4 label">Company</div>
+                            <div class="col-lg-9 col-md-8">{{ auth()->user()->company }}</div>
                         </div>
 
                     </div>
