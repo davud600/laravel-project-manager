@@ -16,4 +16,13 @@ class Request extends Model
         'project_id',
         'status'
     ];
+
+    protected static function booted()
+    {
+        static::deleted(function ($request) {
+            // delete request messages
+            Message::where('request_id', $request->id)
+                ->delete();
+        });
+    }
 }
