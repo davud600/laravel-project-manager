@@ -47,4 +47,52 @@
 
     </div>
 </div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Messages</h5>
+        <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column gap-1 w-50">
+                @foreach ($messages as $message)
+                @if ($message->created_by == auth()->user()->id)
+                <div class="d-flex justify-content-end">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row">
+                            <span class="fw-bold">me:&nbsp;&nbsp;</span>
+                            <span class="me-3" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ $message->created_at }}">
+                                {{ $message->text }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="d-flex justify-content-start">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row">
+                            <span class="fw-bold">{{ getUserNameFromId($message->created_by) }}:&nbsp;&nbsp;</span>
+                            <span class="me-3" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $message->created_at }}">
+                                {{ $message->text }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                <hr>
+                @endforeach
+            </div>
+        </div>
+        <!-- Send message form -->
+        <div class="d-flex justify-content-center">
+            <form action="/requests/{{ $request->id }}/create-message" class="w-50" method="post" enctype="multipart/form-data">
+                @csrf()
+                @method('POST')
+                <div class="mt-3 mb-3 justify-content-center d-flex gap-2 flex-row">
+                    <input type="text" name="message" class="form-control">
+                    <input type="file" name="userfile">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @stop

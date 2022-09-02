@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\UserController;
@@ -40,7 +41,6 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::controller(ProjectController::class)->group(function () {
-    Route::get('/projects', 'index');
     Route::get('/projects/create', 'create');
     Route::post('/projects/create', 'store');
     Route::get('/projects/{id}', 'show');
@@ -51,14 +51,15 @@ Route::controller(ProjectController::class)->group(function () {
 });
 
 Route::controller(RequestController::class)->group(function () {
-    Route::get('/requests', 'index');
     Route::get('/requests/create', 'create');
     Route::post('/requests/create', 'store');
     Route::get('/requests/{id}', 'show');
     Route::get('/requests/{id}/edit', 'edit');
     Route::put('/requests/{id}', 'update');
     Route::delete('/requests/{id}', 'destroy');
-    Route::post('/requests/{id}/change-estimated-time', 'addEstimatedTime');
+    Route::get('/requests/{id}/change-status', 'changeStatus');
 });
+
+Route::post('requests/{request_id}/create-message', [MessageController::class, 'store']);
 
 include __DIR__ . '/auth.php';

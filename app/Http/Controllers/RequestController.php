@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use App\Models\Project;
 use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
@@ -42,10 +43,12 @@ class RequestController extends Controller
     {
         $request = ModelsRequest::where('id', $id)->first();
         $project = Project::where('id', $request->project_id)->first();
+        $messages = Message::where('request_id', $id)->get();
 
         return view('request.show', [
             'request' => $request,
-            'project' => $project
+            'project' => $project,
+            'messages' => $messages
         ]);
     }
 
@@ -82,5 +85,17 @@ class RequestController extends Controller
         $request = ModelsRequest::where('id', $request_id)->first();
         $request->delete();
         return redirect()->intended('/dashboard');
+    }
+
+    public function changeStatus($request_id)
+    {
+        $request = ModelsRequest::where('id', $request_id)
+            ->first();
+
+        $request->update([
+            'status' => $request->status == 0 ? 1 : 0
+        ]);
+
+        return redirect('projects/' . $request->project_id);
     }
 }

@@ -111,6 +111,11 @@
                     </td>
                     <td>
                         <a class="btn btn-primary" href="/requests/{{ $request->id }}">View</a>
+                        @if ($request->status == 0)
+                        <a class="btn btn-success" href="/requests/{{ $request->id }}/change-status">Approve</a>
+                        @else
+                        <a class="btn btn-danger" href="/requests/{{ $request->id }}/change-status">Cancel</a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

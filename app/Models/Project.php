@@ -26,10 +26,12 @@ class Project extends Model
                 ->delete();
 
             // delete project estimated time adds
-            EmployeeEstimatedTime::where('proejct_id', $project->id)
+            EmployeeEstimatedTime::where('project_id', $project->id)
                 ->delete();
 
             // delete requests
+            Request::where('project_id', $project->id)
+                ->delete();
         });
     }
 }
