@@ -31,9 +31,9 @@
                 <span>
                     {!!
                     $request->status == 0 ? '
-                    <span class="badge bg-secondary">In Progress</span>' :
+                    <span class="badge bg-secondary">Under Review</span>' :
                     '
-                    <span class="badge bg-success">Finished</span>'
+                    <span class="badge bg-success">Approved</span>'
                     !!}
                 </span>
             </li>

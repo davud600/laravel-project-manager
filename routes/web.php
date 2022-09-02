@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RequestController;
@@ -26,7 +28,7 @@ Route::get('/profile', function () {
     return view('user.profile');
 });
 
-Route::controller(AdminController::class)->group(function () {
+Route::controller(UserController::class)->group(function () {
     Route::get('/dashboard', 'dashboard');
 });
 

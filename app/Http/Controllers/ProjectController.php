@@ -41,10 +41,20 @@ class projectController extends Controller
 
         $newProject = Project::create([
             'title' => $request->title,
-            'customer_id' => 1,
+            'customer_id' => $request->customer,
             'description' => $request->description,
             'estimated_time' => $estimated_time,
             'status' => 0
+        ]);
+
+        EmployeeEstimatedTime::create([
+            'employee_id' => auth()->user()->id,
+            'project_id' => $newProject->id,
+            'time_added' => getTimeFromHoursAndMinutes(
+                $request->hours,
+                $request->minutes
+            ),
+            'created_by_admin' => true
         ]);
 
         setEmployeesOfProject($newProject->id, $inputtedEmployees);
@@ -70,25 +80,6 @@ class projectController extends Controller
             'id',
             $projectEmployeesIds
         )->get();
-
-        $project->estimated_time = getHoursAndMinutesFromTime(
-            $project->estimated_time
-        );
-        $project->customer_id = getUserNameFromId(
-            $project->customer_id
-        );
-
-        foreach ($employees_activity as $employee_activity) {
-            $employee_activity->time_added = getHoursAndMinutesFromTime(
-                $employee_activity->time_added
-            );
-            $employee_activity->employee_id = getUserNameFromId(
-                $employee_activity->employee_id
-            );
-            $employee_activity->project_id = getProjectTitleFromId(
-                $employee_activity->project_id
-            );
-        }
 
         return view('project.show', [
             'project' => $project,

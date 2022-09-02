@@ -2,12 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeEstimatedTime;
+use App\Models\Project;
+use App\Models\ProjectEmployee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function dashboard()
+    {
+        if (auth()->user()->role == 2) {
+            $projects = Project::all();
+            $employees_activity = EmployeeEstimatedTime::where('created_by_admin', false)
+                ->get();
+
+            return view('admin.dashboard', [
+                'projects' => $projects,
+                'employees_activity' => $employees_activity
+            ]);
+        } else if (auth()->user()->role == 1) {
+            $employee_project_ids = array_column(
+                ProjectEmployee::where(
+                    'employee_id',
+                    auth()->user()->id
+                )->get()->toArray(),
+                'project_id'
+            );
+
+            $projects = Project::where('id', $employee_project_ids)->get();
+
+            $employees_activity = EmployeeEstimatedTime::where(
+                'employee_id',
+                auth()->user()->id
+            )->get();
+
+            return view('employee.dashboard', [
+                'projects' => $projects,
+                'employees_activity' => $employees_activity
+            ]);
+        }
+
+        $projects = Project::where(
+            'customer_id',
+            auth()->user()->id
+        )->get();
+
+        return view('customer.dashboard', [
+            'projects' => $projects
+        ]);
+    }
+
     public function index()
     {
         $users = User::all();

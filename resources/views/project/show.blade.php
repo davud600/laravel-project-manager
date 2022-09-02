@@ -40,7 +40,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Customer</span>
-                <span>{{ $project->customer_id }}</span>
+                <span>{{ getUserNameFromId($project->customer_id) }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Employees</span>
@@ -67,7 +67,7 @@
                     </form>
                     @endif
                     <span class="mt-2">
-                        {{ $project->estimated_time }}
+                        {{ getHoursAndMinutesFromTime($project->estimated_time) }}
                     </span>
                 </div>
             </li>
@@ -111,10 +111,12 @@
                     </td>
                     <td>
                         <a class="btn btn-primary" href="/requests/{{ $request->id }}">View</a>
+                        @if (auth()->user()->role > 0)
                         @if ($request->status == 0)
                         <a class="btn btn-success" href="/requests/{{ $request->id }}/change-status">Approve</a>
                         @else
                         <a class="btn btn-danger" href="/requests/{{ $request->id }}/change-status">Cancel</a>
+                        @endif
                         @endif
                     </td>
                 </tr>
@@ -135,7 +137,6 @@
             <thead>
                 <tr>
                     <th scope="col">Employee</th>
-                    <th scope="col">Project</th>
                     <th scope="col">Description</th>
                     <th scope="col">Time added</th>
                     <th scope="col">Added at</th>
@@ -144,10 +145,19 @@
             <tbody>
                 @foreach ($employees_activity as $employee_activity)
                 <tr>
-                    <th scope="row">{{ $employee_activity->employee_id }}</th>
-                    <td>{{ $employee_activity->project_id }}</td>
+                    <th scope="row">
+                        @if (auth()->user()->id == $employee_activity->employee_id)
+                        (me)
+                        @endif
+                        {{ getUserNameFromId($employee_activity->employee_id) }}
+                    </th>
                     <td>{{ $employee_activity->description }}</td>
-                    <td>{{ $employee_activity->time_added }}</td>
+                    <td>
+                        @if ($employee_activity->created_by_admin)
+                        (UPDATED)
+                        @endif
+                        {{ getHoursAndMinutesFromTime($employee_activity->time_added) }}
+                    </td>
                     <td>{{ $employee_activity->created_at }}</td>
                 </tr>
                 @endforeach

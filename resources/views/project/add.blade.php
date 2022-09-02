@@ -23,6 +23,7 @@
                     <label for="title">Project Title</label>
                 </div>
             </div>
+
             <div class="col-md-4">
                 <div class="mb-3 form-floating">
                     <select name="customer" class="form-select" id="floatingSelect" aria-label="State">
@@ -35,6 +36,7 @@
                     <label for="floatingSelect">Customer</label>
                 </div>
             </div>
+
             <div class="col-md-12">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="description" name="description" placeholder="Project Description">
