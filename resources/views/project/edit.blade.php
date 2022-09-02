@@ -23,7 +23,7 @@
             @method('PUT')
             <div class="col-md-8">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Project Title" value="{!! $project->title !!}" required>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Project Title" value="{{ $project->title }}" required>
                     <label for="title">Project Title</label>
                 </div>
             </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="description" name="description" placeholder="Project Description" value="{!! $project->description !!}">
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Project Description" value="{{ $project->description }}">
                     <label for="description">Project Description</label>
                 </div>
             </div>
@@ -56,11 +56,11 @@
                 <label class="mt-3 mb-2 ms-2">Estimated Time</label>
                 <div class="gap-2 d-flex">
                     <div class="form-floating w-75">
-                        <input min="0" type="number" class="form-control" id="hours" name="hours" placeholder="Hours" value="{!! floor($project->estimated_time / 60) !!}">
+                        <input min="0" type="number" class="form-control" id="hours" name="hours" placeholder="Hours" value="{{ floor($project->estimated_time / 60) }}">
                         <label for="hours">Hours</label>
                     </div>
                     <div class="form-floating w-75">
-                        <input min="0" type="number" class="form-control" id="minutes" name="minutes" placeholder="Minutes" value="{!! $project->estimated_time % 60 !!}">
+                        <input min="0" type="number" class="form-control" id="minutes" name="minutes" placeholder="Minutes" value="{{ $project->estimated_time % 60 }}">
                         <label for="minutes">Minutes</label>
                     </div>
                 </div>

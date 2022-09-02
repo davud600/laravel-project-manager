@@ -38,11 +38,10 @@
                 </div>
             </div>
 
-            <div class="col-12">
-                <label for="yourCompany" class="form-label">Your Company</label>
-                <input type="text" name="company" class="form-control" id="yourCompany" value="{{ $user->company }}" />
-                <div class="invalid-feedback">
-                    Enter your company name!
+            <div class="col-md-8">
+                <div class="form-floating">
+                    <input type="text" name="company" class="form-control" id="floatingCompany" placeholder="Your Company" value="{{ $user->company }}" />
+                    <label for="floatingCompany">Your Company</label>
                 </div>
             </div>
 
@@ -52,12 +51,7 @@
                     <label for="floatingEmail">Your New Password</label>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="form-floating">
-                    <input type="text" name="company" class="form-control" id="floatingName" placeholder="Your Name" />
-                    <label for="floatingName">Company</label>
-                </div>
-            </div>
+
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Submit

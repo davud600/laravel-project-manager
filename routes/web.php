@@ -46,6 +46,7 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects/{id}/edit', 'edit');
     Route::put('/projects/{id}', 'update');
     Route::delete('/projects/{id}', 'destroy');
+    Route::post('/projects/{id}/change-estimated-time', 'changeEstimatedTime');
 });
 
 include __DIR__ . '/auth.php';

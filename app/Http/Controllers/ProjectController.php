@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeEstimatedTime;
 use App\Models\project;
 use App\Models\ProjectEmployee;
 use App\Models\User;
@@ -28,11 +29,11 @@ class projectController extends Controller
 
     public function store(Request $request)
     {
-        $inputtedEmployees = $this->getInputtedEmployees(
+        $inputtedEmployees = getInputtedEmployees(
             $request
         );
 
-        $estimated_time = $this->getTimeFromHoursAndMinutes(
+        $estimated_time = getTimeFromHoursAndMinutes(
             $request->hours,
             $request->minutes
         );
@@ -45,14 +46,7 @@ class projectController extends Controller
             'status' => 0
         ]);
 
-        $this->setEmployeesOfProject($newProject->id, $inputtedEmployees);
-
-        // foreach ($inputtedEmployees as $employee) {
-        //     ProjectEmployee::create([
-        //         'project_id' => $newProject->id,
-        //         'employee_id' => $employee
-        //     ]);
-        // }
+        setEmployeesOfProject($newProject->id, $inputtedEmployees);
 
         return redirect('projects/' . $newProject->id . '/edit');
     }
@@ -61,19 +55,41 @@ class projectController extends Controller
     {
         $project = Project::where('id', $project_id)->first();
         $customer = User::where('id', $project->customer_id)->first();
+        $employees_activity = EmployeeEstimatedTime::where('project_id', $project_id)
+            ->get();
 
-        $projectEmployeesIds = ProjectEmployee::select('employee_id')
-            ->where('project_id', $project_id)->get();
+        $projectEmployeesIds = array_column(
+            ProjectEmployee::select('employee_id')
+                ->where('project_id', $project_id)->get()->toArray(),
+            'employee_id'
+        );
 
         $projectEmployees = User::where(
             'id',
-            array_column($projectEmployeesIds->toArray(), 'employee_id')
+            $projectEmployeesIds
         )->get();
+
+        $project->estimated_time = getHoursAndMinutesFromTime(
+            $project->estimated_time
+        );
+
+        foreach ($employees_activity as $employee_activity) {
+            $employee_activity->time_added = getHoursAndMinutesFromTime(
+                $employee_activity->time_added
+            );
+            $employee_activity->employee_id = getUserNameFromId(
+                $employee_activity->employee_id
+            );
+            $employee_activity->project_id = getProjectTitleFromId(
+                $employee_activity->project_id
+            );
+        }
 
         return view('project.show', [
             'project' => $project,
             'customer' => $customer,
-            'employees' => $projectEmployees
+            'employees' => $projectEmployees,
+            'employees_activity' => $employees_activity
         ]);
     }
 
@@ -105,11 +121,11 @@ class projectController extends Controller
     {
         $project = Project::where('id', $project_id)->first();
 
-        $inputtedEmployees = $this->getInputtedEmployees(
+        $inputtedEmployees = getInputtedEmployees(
             $request
         );
 
-        $estimated_time = $this->getTimeFromHoursAndMinutes(
+        $estimated_time = getTimeFromHoursAndMinutes(
             $request->hours,
             $request->minutes
         );
@@ -121,60 +137,39 @@ class projectController extends Controller
             'status' => $request->status
         ]);
 
-        $this->setEmployeesOfProject($project->id, $inputtedEmployees);
+        setEmployeesOfProject($project->id, $inputtedEmployees);
 
         return redirect('projects/' . $project->id . '/edit');
     }
 
-    public function destroy($project)
+    public function destroy($project_id)
     {
+        $project = Project::where('id', $project_id)->first();
         $project->delete();
-        return redirect('projects/');
+        return redirect()->intended('/dashboard');
     }
 
-    private function getTimeFromHoursAndMinutes($user_hours, $user_minutes)
+    public function changeEstimatedTime(Request $request, $project_id)
     {
-        $user_hours = $user_hours ? $user_hours : 0;
-        $user_minutes = $user_minutes ? $user_minutes : 0;
+        EmployeeEstimatedTime::create([
+            'description' => $request->description,
+            'employee_id' => auth()->user()->id,
+            'project_id' => $project_id,
+            'time_added' => getTimeFromHoursAndMinutes(
+                $request->hours,
+                $request->minutes
+            ),
+            'created_by_admin' => auth()->user()->role == 2
+        ]);
 
-        return ($user_hours * 60) + $user_minutes;
-    }
+        $project = Project::where('id', $project_id)->first();
+        $project->update([
+            'estimated_time' => $project->estimated_time + getTimeFromHoursAndMinutes(
+                $request->hours,
+                $request->minutes
+            )
+        ]);
 
-    private function getInputtedEmployees($request)
-    {
-        $MAX_EMPLOYEES = 100;
-        $inputedEmployees = [];
-        for ($i = 0; $i < $MAX_EMPLOYEES; $i++) {
-            if ($request->input('employee' . $i) == null) {
-                continue;
-            }
-
-            if (in_array($request->input('employee' . $i), $inputedEmployees)) {
-                continue;
-            }
-
-            array_push($inputedEmployees, $request->input('employee' . $i));
-        }
-
-        return $inputedEmployees;
-    }
-
-    private function setEmployeesOfProject($project_id, $employee_ids)
-    {
-        // del all initial employees if thers any
-        $this->deleteAllEmployeesOfProject($project_id);
-
-        foreach ($employee_ids as $employee_id) {
-            ProjectEmployee::create([
-                'project_id' => $project_id,
-                'employee_id' => $employee_id
-            ]);
-        }
-    }
-
-    private function deleteAllEmployeesOfProject($project_id)
-    {
-        ProjectEmployee::where('project_id', $project_id)
-            ->delete();
+        return redirect('projects/' . $project_id);
     }
 }

@@ -33,6 +33,7 @@
                     <td>{{ $project->created_at }}</td>
                     <td>
                         <a class="btn btn-primary" href="">View</a>
+                        <a class="btn btn-secondary" href="">Archive</a>
                     </td>
                 </tr>
                 @endforeach

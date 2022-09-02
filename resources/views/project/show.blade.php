@@ -23,12 +23,12 @@
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Status</span>
                 <span>
-                    <?php
-                    echo $project['status'] == 0 ? '
+                    {!!
+                    $project->status == 0 ? '
                     <span class="badge bg-secondary">In Progress</span>' :
-                        '
+                    '
                     <span class="badge bg-success">Finished</span>'
-                    ?>
+                    !!}
                 </span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
@@ -45,22 +45,20 @@
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Estimated Time</span>
-                <div class="gap-3 form-group d-flex">
+                <div class="gap-3 form-group d-flex justify-content-end">
+                    <form class="d-flex w-75 gap-2" action="{{ $project->id}}/change-estimated-time" method="post">
+                        @csrf()
+                        @method('POST')
+                        <label for="description" class="fw-light mt-2">Description</label>
+                        <input type="text" class="form-control" name="description" id="description">
+                        <input min="0" type="number" class="form-control ms-2 w-50" name="hours" id="hours">
+                        <label for="hours" class="fw-light mt-2">Hr</label>
+                        <input min="0" type="number" class="form-control w-50" name="minutes" id="minutes">
+                        <label for="minutes" class="fw-light mt-2">Min</label>
+                        <input type="submit" class="btn btn-primary w-50" value="Add Time">
+                    </form>
                     <span class="mt-2">
-                        <?php
-                        $hrs = floor($project['estimated_time'] / 60);
-                        $min = $project['estimated_time'] % 60;
-
-                        if (strlen($hrs) == 1) {
-                            echo '0';
-                        }
-                        echo $hrs . ':';
-
-                        if (strlen($min) == 1) {
-                            echo '0';
-                        }
-                        echo $min;
-                        ?>
+                        {{ $project->estimated_time }}
                     </span>
                 </div>
             </li>
@@ -116,18 +114,20 @@
                     <th scope="col">Employee</th>
                     <th scope="col">Project</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Time</th>
+                    <th scope="col">Time added</th>
                     <th scope="col">Added at</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach ($employees_activity as $employee_activity)
                 <tr>
-                    <th scope="row">$project->id</th>
-                    <td>$project->title</td>
-                    <td>$project->status</td>
-                    <td>$project->estimated_time</td>
-                    <td>a</td>
+                    <th scope="row">{{ $employee_activity->employee_id }}</th>
+                    <td>{{ $employee_activity->project_id }}</td>
+                    <td>{{ $employee_activity->description }}</td>
+                    <td>{{ $employee_activity->time_added }}</td>
+                    <td>{{ $employee_activity->created_at }}</td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->

@@ -17,4 +17,19 @@ class Project extends Model
         'estimated_time',
         'customer_id'
     ];
+
+    protected static function booted()
+    {
+        static::deleted(function ($project) {
+            // delete project employees
+            ProjectEmployee::where('project_id', $project->id)
+                ->delete();
+
+            // delete project estimated time adds
+            EmployeeEstimatedTime::where('proejct_id', $project->id)
+                ->delete();
+
+            // delete requests
+        });
+    }
 }
