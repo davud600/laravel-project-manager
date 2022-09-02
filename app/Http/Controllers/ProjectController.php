@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\project;
 use App\Models\ProjectEmployee;
+use App\Models\Request as ModelsRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -54,8 +55,9 @@ class projectController extends Controller
     public function show($project_id)
     {
         $project = Project::where('id', $project_id)->first();
-        $customer = User::where('id', $project->customer_id)->first();
         $employees_activity = EmployeeEstimatedTime::where('project_id', $project_id)
+            ->get();
+        $project_requests = ModelsRequest::where('project_id', $project_id)
             ->get();
 
         $projectEmployeesIds = array_column(
@@ -72,6 +74,9 @@ class projectController extends Controller
         $project->estimated_time = getHoursAndMinutesFromTime(
             $project->estimated_time
         );
+        $project->customer_id = getUserNameFromId(
+            $project->customer_id
+        );
 
         foreach ($employees_activity as $employee_activity) {
             $employee_activity->time_added = getHoursAndMinutesFromTime(
@@ -87,9 +92,9 @@ class projectController extends Controller
 
         return view('project.show', [
             'project' => $project,
-            'customer' => $customer,
             'employees' => $projectEmployees,
-            'employees_activity' => $employees_activity
+            'employees_activity' => $employees_activity,
+            'project_requests' => $project_requests
         ]);
     }
 
@@ -130,6 +135,18 @@ class projectController extends Controller
             $request->minutes
         );
 
+        if ($project->estimated_time != $estimated_time) {
+            EmployeeEstimatedTime::create([
+                'employee_id' => auth()->user()->id,
+                'project_id' => $project_id,
+                'time_added' => getTimeFromHoursAndMinutes(
+                    $request->hours,
+                    $request->minutes
+                ),
+                'created_by_admin' => true
+            ]);
+        }
+
         $project->update([
             'title' => $request->title,
             'description' => $request->description,
@@ -149,7 +166,7 @@ class projectController extends Controller
         return redirect()->intended('/dashboard');
     }
 
-    public function changeEstimatedTime(Request $request, $project_id)
+    public function addEstimatedTime(Request $request, $project_id)
     {
         EmployeeEstimatedTime::create([
             'description' => $request->description,
@@ -159,7 +176,7 @@ class projectController extends Controller
                 $request->hours,
                 $request->minutes
             ),
-            'created_by_admin' => auth()->user()->role == 2
+            'created_by_admin' => false
         ]);
 
         $project = Project::where('id', $project_id)->first();

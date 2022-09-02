@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +47,18 @@ Route::controller(ProjectController::class)->group(function () {
     Route::get('/projects/{id}/edit', 'edit');
     Route::put('/projects/{id}', 'update');
     Route::delete('/projects/{id}', 'destroy');
-    Route::post('/projects/{id}/change-estimated-time', 'changeEstimatedTime');
+    Route::post('/projects/{id}/change-estimated-time', 'addEstimatedTime');
+});
+
+Route::controller(RequestController::class)->group(function () {
+    Route::get('/requests', 'index');
+    Route::get('/requests/create', 'create');
+    Route::post('/requests/create', 'store');
+    Route::get('/requests/{id}', 'show');
+    Route::get('/requests/{id}/edit', 'edit');
+    Route::put('/requests/{id}', 'update');
+    Route::delete('/requests/{id}', 'destroy');
+    Route::post('/requests/{id}/change-estimated-time', 'addEstimatedTime');
 });
 
 include __DIR__ . '/auth.php';

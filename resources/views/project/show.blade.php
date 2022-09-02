@@ -9,7 +9,14 @@
 @stop
 
 @section('content')
-<h1>{{ $project->title }}</h1>
+<div class="d-flex justify-content-between">
+    <h1>{{ $project->title }}</h1>
+    @if (auth()->user()->role == 0)
+    <a class="mb-4 me-3 btn btn-outline-success" href="/requests/create?project_id={{ $project->id }}">
+        <span>Create Request</span>
+    </a>
+    @endif
+</div>
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Project Information</h5>
@@ -33,7 +40,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Customer</span>
-
+                <span>{{ $project->customer_id }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Employees</span>
@@ -46,6 +53,7 @@
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Estimated Time</span>
                 <div class="gap-3 form-group d-flex justify-content-end">
+                    @if (auth()->user()->role == 1)
                     <form class="d-flex w-75 gap-2" action="{{ $project->id}}/change-estimated-time" method="post">
                         @csrf()
                         @method('POST')
@@ -57,15 +65,18 @@
                         <label for="minutes" class="fw-light mt-2">Min</label>
                         <input type="submit" class="btn btn-primary w-50" value="Add Time">
                     </form>
+                    @endif
                     <span class="mt-2">
                         {{ $project->estimated_time }}
                     </span>
                 </div>
             </li>
 
+            @if (auth()->user()->role == 2)
             <div class="mt-4 d-flex justify-content-center">
                 <a class="btn btn-secondary ps-4 pe-4" href="/projects/{{ $project->id }}/edit">Edit</a>
             </div>
+            @endif
         </ul><!-- End Default List group -->
 
     </div>
@@ -79,7 +90,6 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Subject</th>
                     <th scope="col">Content</th>
                     <th scope="col">Status</th>
@@ -87,15 +97,23 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($project_requests as $request)
                 <tr>
-                    <th scope="row">$project->id</th>
-                    <td>$project->title</td>
-                    <td>$project->status</td>
-                    <td>$project->estimated_time</td>
+                    <th>{{ $request->title }}</th>
+                    <td>{{ $request->description }}</td>
                     <td>
-                        <a class="btn btn-primary" href="">View</a>
+                        {!!
+                        $request->status == 0 ? '
+                        <span class="badge bg-secondary">Under Review</span>' :
+                        '
+                        <span class="badge bg-success">Approved</span>'
+                        !!}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="/requests/{{ $request->id }}">View</a>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->

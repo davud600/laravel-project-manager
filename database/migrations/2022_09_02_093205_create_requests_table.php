@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('employee_estimated_times', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->string('description')->nullable();
-            $table->integer('employee_id');
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->integer('project_id');
-            $table->integer('time_added');
-            $table->boolean('created_by_admin')->default(false);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_estimated_times');
+        Schema::dropIfExists('requests');
     }
 };
