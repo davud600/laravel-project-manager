@@ -11,11 +11,12 @@
 @section('content')
 <div class="d-flex justify-content-between">
     <h1>{{ $project->title }}</h1>
-    @if (auth()->user()->role == 0)
+    @can('create-requests')
     <a class="mb-4 me-3 btn btn-outline-success" href="/requests/create?project_id={{ $project->id }}">
         <span>Create Request</span>
     </a>
-    @endif
+    @endcan
+
 </div>
 <div class="card">
     <div class="card-body">
@@ -53,7 +54,7 @@
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Estimated Time</span>
                 <div class="gap-3 form-group d-flex justify-content-end">
-                    @if (auth()->user()->role == 1)
+                    @can('add-time-to-projects')
                     <form class="d-flex w-75 gap-2" action="{{ $project->id}}/change-estimated-time" method="post">
                         @csrf()
                         @method('POST')
@@ -65,18 +66,18 @@
                         <label for="minutes" class="fw-light mt-2">Min</label>
                         <input type="submit" class="btn btn-primary w-50" value="Add Time">
                     </form>
-                    @endif
+                    @endcan
                     <span class="mt-2">
                         {{ getHoursAndMinutesFromTime($project->estimated_time) }}
                     </span>
                 </div>
             </li>
 
-            @if (auth()->user()->role == 2)
+            @can('edit-projects')
             <div class="mt-4 d-flex justify-content-center">
                 <a class="btn btn-secondary ps-4 pe-4" href="/projects/{{ $project->id }}/edit">Edit</a>
             </div>
-            @endif
+            @endcan
         </ul><!-- End Default List group -->
 
     </div>
@@ -111,13 +112,13 @@
                     </td>
                     <td>
                         <a class="btn btn-primary" href="/requests/{{ $request->id }}">View</a>
-                        @if (auth()->user()->role > 0)
+                        @can('change-status-requests')
                         @if ($request->status == 0)
                         <a class="btn btn-success" href="/requests/{{ $request->id }}/change-status">Approve</a>
                         @else
                         <a class="btn btn-danger" href="/requests/{{ $request->id }}/change-status">Cancel</a>
                         @endif
-                        @endif
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

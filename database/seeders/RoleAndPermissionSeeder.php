@@ -47,8 +47,6 @@ class RoleAndPermissionSeeder extends Seeder
             Permissions::EDIT_PROJECTS,
             Permissions::DELETE_PROJECTS,
             Permissions::LIST_REQUESTS,
-            Permissions::CREATE_REQUESTS,
-            Permissions::EDIT_REQUESTS,
             Permissions::DELETE_REQUESTS,
             Permissions::CHANGE_STATUS_REQUESTS
         ]);

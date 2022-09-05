@@ -38,11 +38,11 @@
                 </span>
             </li>
 
-            @if (auth()->user()->role == 0)
+            @can('edit-requests')
             <div class="mt-4 d-flex justify-content-center">
                 <a class="btn btn-secondary ps-4 pe-4" href="/requests/{{ $request->id }}/edit?project_id={{ $project->id }}">Edit</a>
             </div>
-            @endif
+            @endcan
         </ul><!-- End Default List group -->
 
     </div>
