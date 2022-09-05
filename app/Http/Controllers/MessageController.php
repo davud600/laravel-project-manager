@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function store(Request $request, $request_id)
+    public function store(Request $request, int $request_id)
     {
         $user_file = $request->userfile;
         $file_path = null;

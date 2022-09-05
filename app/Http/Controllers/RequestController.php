@@ -39,7 +39,7 @@ class RequestController extends Controller
         return redirect('requests/' . $newRequest->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $request = ModelsRequest::where('id', $id)->first();
         $project = Project::where('id', $request->project_id)->first();
@@ -52,7 +52,7 @@ class RequestController extends Controller
         ]);
     }
 
-    public function edit(Request $req, $id)
+    public function edit(Request $req, int $id)
     {
         $project = null;
         if ($req->has('project_id')) {
@@ -68,7 +68,7 @@ class RequestController extends Controller
         ]);
     }
 
-    public function update(Request $req, $id)
+    public function update(Request $req, int $id)
     {
         $request = ModelsRequest::where('id', $id)->first();
 
@@ -80,14 +80,14 @@ class RequestController extends Controller
         return redirect('requests/' . $request->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
-    public function destroy($request_id)
+    public function destroy(int $request_id)
     {
         $request = ModelsRequest::where('id', $request_id)->first();
         $request->delete();
         return redirect()->intended('/dashboard');
     }
 
-    public function changeStatus($request_id)
+    public function changeStatus(int $request_id)
     {
         $request = ModelsRequest::where('id', $request_id)
             ->first();

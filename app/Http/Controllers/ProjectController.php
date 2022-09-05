@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\project;
 use App\Models\ProjectEmployee;
@@ -28,7 +29,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
         $inputtedEmployees = getInputtedEmployees(
             $request
@@ -62,7 +63,7 @@ class ProjectController extends Controller
         return redirect('projects/' . $newProject->id . '/edit');
     }
 
-    public function show($project_id)
+    public function show(int $project_id)
     {
         $project = Project::where('id', $project_id)->first();
         $employees_activity = EmployeeEstimatedTime::where('project_id', $project_id)
@@ -89,7 +90,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function edit($project_id)
+    public function edit(int $project_id)
     {
         $project = Project::where('id', $project_id)->first();
         $allEmployees = User::where('role', 1)->get();
@@ -113,7 +114,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function update(Request $request, $project_id)
+    public function update(Request $request, int $project_id)
     {
         $project = Project::where('id', $project_id)->first();
 
@@ -150,14 +151,14 @@ class ProjectController extends Controller
         return redirect('projects/' . $project->id . '/edit');
     }
 
-    public function destroy($project_id)
+    public function destroy(int $project_id)
     {
         $project = Project::where('id', $project_id)->first();
         $project->delete();
         return redirect()->intended('/dashboard');
     }
 
-    public function addEstimatedTime(Request $request, $project_id)
+    public function addEstimatedTime(Request $request, int $project_id)
     {
         EmployeeEstimatedTime::create([
             'description' => $request->description,

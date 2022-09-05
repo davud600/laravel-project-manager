@@ -2,23 +2,20 @@
 
 use App\Models\Project;
 use App\Models\ProjectEmployee;
+use Illuminate\Http\Request;
 use App\Models\User;
 
 if (!function_exists('getHoursAndMinutesFromTime')) {
-    function getHoursAndMinutesFromTime($time)
+    function getHoursAndMinutesFromTime(int $time): string
     {
         $str = '';
         $hrs = floor($time / 60);
         $min = $time % 60;
 
-        if (strlen($hrs) == 1) {
-            $str = $str . '0';
-        }
+        $str = strlen($hrs) == 1 ? $str . '0' : $str;
         $str = $str . $hrs . ':';
 
-        if (strlen($min) == 1) {
-            $str = $str . '0';
-        }
+        $str = strlen($min) == 1 ? $str . '0' : $str;
         $str = $str . $min;
 
         return $str;
@@ -26,7 +23,7 @@ if (!function_exists('getHoursAndMinutesFromTime')) {
 }
 
 if (!function_exists('getTimeFromHoursAndMinutes')) {
-    function getTimeFromHoursAndMinutes($user_hours, $user_minutes)
+    function getTimeFromHoursAndMinutes(int $user_hours, int $user_minutes): int
     {
         $user_hours = $user_hours ? $user_hours : 0;
         $user_minutes = $user_minutes ? $user_minutes : 0;
@@ -36,7 +33,7 @@ if (!function_exists('getTimeFromHoursAndMinutes')) {
 }
 
 if (!function_exists('setEmployeesOfProject')) {
-    function setEmployeesOfProject($project_id, $employee_ids)
+    function setEmployeesOfProject(int $project_id, array $employee_ids): void
     {
         // del all initial employees if thers any
         deleteAllEmployeesOfProject($project_id);
@@ -51,7 +48,7 @@ if (!function_exists('setEmployeesOfProject')) {
 }
 
 if (!function_exists('getInputtedEmployees')) {
-    function getInputtedEmployees($request)
+    function getInputtedEmployees(Request $request): array
     {
         $MAX_EMPLOYEES = 100;
         $inputedEmployees = [];
@@ -72,7 +69,7 @@ if (!function_exists('getInputtedEmployees')) {
 }
 
 if (!function_exists('deleteAllEmployeesOfProject')) {
-    function deleteAllEmployeesOfProject($project_id)
+    function deleteAllEmployeesOfProject(int $project_id): void
     {
         ProjectEmployee::where('project_id', $project_id)
             ->delete();
@@ -80,14 +77,14 @@ if (!function_exists('deleteAllEmployeesOfProject')) {
 }
 
 if (!function_exists('getUserNameFromId')) {
-    function getUserNameFromId($user_id)
+    function getUserNameFromId(int $user_id): string
     {
         return User::where('id', $user_id)->first()->name;
     }
 }
 
 if (!function_exists('getProjectTitleFromId')) {
-    function getProjectTitleFromId($project_id)
+    function getProjectTitleFromId(int $project_id): string
     {
         return Project::where('id', $project_id)->first()->title;
     }

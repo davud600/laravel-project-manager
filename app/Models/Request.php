@@ -19,7 +19,7 @@ class Request extends Model
 
     protected static function booted()
     {
-        static::deleted(function ($request) {
+        static::deleted(function (Request $request) {
             // delete request messages
             Message::where('request_id', $request->id)
                 ->delete();

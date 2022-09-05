@@ -20,7 +20,7 @@ class Project extends Model
 
     protected static function booted()
     {
-        static::deleted(function ($project) {
+        static::deleted(function (Project $project) {
             // delete project employees
             ProjectEmployee::where('project_id', $project->id)
                 ->delete();

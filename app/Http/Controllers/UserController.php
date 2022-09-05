@@ -80,7 +80,7 @@ class UserController extends Controller
         return redirect('users/' . $newUser->id . '/edit');
     }
 
-    public function show($user_id)
+    public function show(int $user_id)
     {
         $user = User::where('id', $user_id)->first();
 
@@ -89,7 +89,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit($user_id)
+    public function edit(int $user_id)
     {
         $user = User::where('id', $user_id)->first();
 
@@ -98,7 +98,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, $user_id)
+    public function update(Request $request, int $user_id)
     {
         $user = User::where('id', $user_id)->first();
 

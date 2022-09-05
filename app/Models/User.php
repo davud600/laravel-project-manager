@@ -49,18 +49,15 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function ($user) {
+        static::created(function (User $user) {
             // Assign role
-            switch ($user->role) {
-                case 2:
-                    $user->assignRole('Admin');
-                    break;
-                case 1:
-                    $user->assignRole('Employee');
-                    break;
-                default:
-                    $user->assignRole('Customer');
-            }
+            $user->assignRole(
+                match ($user->role) {
+                    2 => 'Admin',
+                    1 => 'Employee',
+                    0 => 'Customer'
+                }
+            );
         });
     }
 }
