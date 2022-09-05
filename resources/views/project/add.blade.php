@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')Create Projects@stop
+@section('title')Create Project@stop
 
 @section('links')
 <li class="breadcrumb-item">

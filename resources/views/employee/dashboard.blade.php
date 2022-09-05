@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')All Projects@stop
+@section('title')My Projects@stop
 
 @section('links')
 <li class="breadcrumb-item active">Dashboard</li>
