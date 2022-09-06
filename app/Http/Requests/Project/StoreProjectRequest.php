@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,8 +24,8 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255|unique:projects',
-            'customer' => 'required'
+            'title' => 'required|max:255',
+            'project_id' => 'required'
         ];
     }
 
@@ -34,8 +34,7 @@ class StoreProjectRequest extends FormRequest
         return [
             'title.required' => 'Title is required!',
             'title.max' => 'Title too long!',
-            'title.unique' => 'Project with that title already exists!',
-            'customer.required' => 'Customer is required!',
+            'project_id.required' => 'Invalid request!',
         ];
     }
 }

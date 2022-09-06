@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Request\StoreRequestRequest;
+use App\Http\Requests\Request\UpdateRequestRequest;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\Request as ModelsRequest;
@@ -28,7 +30,7 @@ class RequestController extends Controller
         ]);
     }
 
-    public function store(Request $req)
+    public function store(StoreRequestRequest $req)
     {
         $newRequest = ModelsRequest::create([
             'title' => $req->title,
@@ -68,7 +70,7 @@ class RequestController extends Controller
         ]);
     }
 
-    public function update(Request $req, int $id)
+    public function update(UpdateRequestRequest $req, int $id)
     {
         $request = ModelsRequest::where('id', $id)->first();
 
