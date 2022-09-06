@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\Project;
 use App\Models\ProjectEmployee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
-    public function importUsers()
-    {
-        return Excel::download(new UsersExport, 'users.xlsx');
-    }
-
     public function dashboard()
     {
         if (auth()->user() == null) {
