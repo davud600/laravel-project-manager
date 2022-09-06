@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMessageRequest;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class MessageController extends Controller
 {
-    public function store(Request $request, int $requestId)
+    public function store(StoreMessageRequest $request, int $requestId)
     {
         $filePath = $this->storeFile($request->file('userfile')) ?? null;
 
