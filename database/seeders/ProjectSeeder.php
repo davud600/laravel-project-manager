@@ -20,7 +20,9 @@ class ProjectSeeder extends Seeder
             'description' => 'Descriprion for the first project',
             'status' => 0,
             'estimated_time' => 1800,
-            'customer_id' => 3
+            'customer_id' => 3,
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
         DB::table('project_employees')->insert([

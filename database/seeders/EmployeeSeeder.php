@@ -21,7 +21,9 @@ class EmployeeSeeder extends Seeder
             'email' => 'e@gmail.com',
             'password' => Hash::make('chkdsk34'),
             'company' => "d's company",
-            'role' => 1
+            'role' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
         DB::table('model_has_roles')->insert([

@@ -18,14 +18,18 @@ class RequestSeeder extends Seeder
             'title' => 'First Request of this project',
             'description' => 'I want new feature. (This one is a finished request)',
             'project_id' => 1,
-            'status' => 1
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
 
         DB::table('requests')->insert([
             'title' => 'Second Request of this project',
             'description' => 'I am requesting a new feature for this project, I want a new feature.',
             'project_id' => 1,
-            'status' => 0
+            'status' => 0,
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
     }
 }
