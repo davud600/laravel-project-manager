@@ -19,8 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/import-users', [ExcelDataController::class, 'importUsers']);
-
-Route::get('/import-projects', [ExcelDataController::class, 'importProjects']);
-
-Route::get('/import-employee-activity', [ExcelDataController::class, 'importEmployeeActivity']);
+Route::controller(ExcelDataController::class)->group(function () {
+    Route::get('/import-users', 'importUsers');
+    Route::get('/import-projects', 'importProjects');
+    Route::get('/import-employee-activity', 'importEmployeeActivity');
+});

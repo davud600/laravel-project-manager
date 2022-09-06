@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -61,5 +60,29 @@ class User extends Authenticatable
                 }
             );
         });
+    }
+
+    public function getById($id): User
+    {
+        return $this->where('id', $id)
+            ->first();
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->where('role', 1)
+            ->get();
+    }
+
+    public function getCustomers(): Collection
+    {
+        return $this->where('role', 0)
+            ->get();
+    }
+
+    public function getUsersByIds(array $userIds): Collection
+    {
+        return $this->where('id', $userIds)
+            ->get();
     }
 }

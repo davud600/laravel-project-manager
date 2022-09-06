@@ -13,15 +13,30 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    public function __construct(
+        User $user,
+        Project $project,
+        ModelsRequest $request,
+        ProjectEmployee $projectEmployee,
+        EmployeeEstimatedTime $employeeEstimatedTime
+    ) {
+        $this->user = $user;
+        $this->project = $project;
+        $this->request = $request;
+        $this->projectEmployee = $projectEmployee;
+        $this->employeeEstimatedTime = $employeeEstimatedTime;
+    }
+
     public function index()
     {
-        return view('project.list', ['projects' => Project::all()]);
+        $projects = $this->project->all();
+        return view('project.list', ['projects' => $projects]);
     }
 
     public function create()
     {
-        $employees = User::where('role', 1)->get();
-        $customers = User::where('role', 0)->get();
+        $employees = $this->user->getEmployees();
+        $customers = $this->user->getCustomers();
 
         return view('project.add', [
             'employees' => $employees,
@@ -40,14 +55,14 @@ class ProjectController extends Controller
             $request->minutes
         );
 
-        $newProject = Project::create([
+        $newProject = $this->project->create([
             'title' => $request->title,
             'customer_id' => $request->customer,
             'description' => $request->description,
             'estimated_time' => $estimated_time
         ]);
 
-        EmployeeEstimatedTime::create([
+        $this->employeeEstimatedTime->create([
             'employee_id' => auth()->user()->id,
             'project_id' => $newProject->id,
             'time_added' => getTimeFromHoursAndMinutes(
@@ -64,45 +79,38 @@ class ProjectController extends Controller
 
     public function show(int $id)
     {
-        $project = Project::where('id', $id)->first();
-        $employees_activity = EmployeeEstimatedTime::where('project_id', $id)
-            ->get();
-        $project_requests = ModelsRequest::where('project_id', $id)
-            ->get();
+        $project = $this->project->getById($id);
+        $employeeActivity = $this->employeeEstimatedTime->getActivityOfProject($id);
+        $projectRequests = $this->request->getRequestsOfProject($id);
 
         $projectEmployeesIds = array_column(
-            ProjectEmployee::select('employee_id')
-                ->where('project_id', $id)->get()->toArray(),
+            $this->projectEmployee->getEmployeesOfProject($id)->toArray(),
             'employee_id'
         );
 
-        $projectEmployees = User::where(
-            'id',
-            $projectEmployeesIds
-        )->get();
+        $projectEmployees = $this->user->getUsersByIds($projectEmployeesIds);
 
         return view('project.show', [
             'project' => $project,
             'employees' => $projectEmployees,
-            'employees_activity' => $employees_activity,
-            'project_requests' => $project_requests
+            'employees_activity' => $employeeActivity,
+            'project_requests' => $projectRequests
         ]);
     }
 
     public function edit(int $id)
     {
-        $project = Project::where('id', $id)->first();
-        $allEmployees = User::where('role', 1)->get();
-        $projectCustomer = User::where('id', $project->customer_id)->first();
-        $customers = User::where('role', 0)->get();
+        $project = $this->project->getById($id);
+        $allEmployees = $this->user->getEmployees();
+        $projectCustomer = $this->user->getById($project->customer_id);
+        $customers = $this->user->getCustomers();
 
-        $projectEmployeesIds = ProjectEmployee::select('employee_id')
-            ->where('project_id', $id)->get();
+        $projectEmployeesIds = array_column(
+            $this->projectEmployee->getEmployeesOfProject($id)->toArray(),
+            'employee_id'
+        );
 
-        $projectEmployees = User::where(
-            'id',
-            array_column($projectEmployeesIds->toArray(), 'employee_id')
-        )->get();
+        $projectEmployees = $this->user->getUsersByIds($projectEmployeesIds);
 
         return view('project.edit', [
             'project' => $project,
@@ -115,7 +123,7 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, int $id)
     {
-        $project = Project::where('id', $id)->first();
+        $project = $this->project->getById($id);
 
         $inputtedEmployees = getInputtedEmployees(
             $request
@@ -127,7 +135,7 @@ class ProjectController extends Controller
         );
 
         if ($project->estimated_time != $estimated_time) {
-            EmployeeEstimatedTime::create([
+            $this->employeeEstimatedTime->create([
                 'employee_id' => auth()->user()->id,
                 'project_id' => $id,
                 'time_added' => getTimeFromHoursAndMinutes(
@@ -152,7 +160,7 @@ class ProjectController extends Controller
 
     public function destroy(int $id)
     {
-        $project = Project::where('id', $id)->first();
+        $project = $this->project->getById($id);
         $project->delete();
 
         return to_route('dashboard');
@@ -160,7 +168,7 @@ class ProjectController extends Controller
 
     public function addEstimatedTime(Request $request, int $id)
     {
-        EmployeeEstimatedTime::create([
+        $this->employeeEstimatedTime->create([
             'description' => $request->description,
             'employee_id' => auth()->user()->id,
             'project_id' => $id,
@@ -171,7 +179,7 @@ class ProjectController extends Controller
             'created_by_admin' => false
         ]);
 
-        $project = Project::where('id', $id)->first();
+        $project = $this->project->getById($id);
         $project->update([
             'estimated_time' => $project->estimated_time + getTimeFromHoursAndMinutes(
                 $request->hours,

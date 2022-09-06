@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 class MessageController extends Controller
 {
+    public function __construct(
+        Message $message
+    ) {
+        $this->message = $message;
+    }
+
     public function store(StoreMessageRequest $request, int $requestId)
     {
         $filePath = $this->storeFile($request->file('userfile')) ?? null;
@@ -18,7 +24,7 @@ class MessageController extends Controller
             return redirect('requests/' . $requestId);
         }
 
-        Message::create([
+        $this->message->create([
             'text' => $request->message,
             'attach' => $filePath,
             'request_id' => $requestId,

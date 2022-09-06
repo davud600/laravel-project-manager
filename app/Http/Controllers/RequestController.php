@@ -11,9 +11,19 @@ use Illuminate\Http\Request;
 
 class RequestController extends Controller
 {
+    public function __construct(
+        ModelsRequest $request,
+        Project $project,
+        Message $message
+    ) {
+        $this->request = $request;
+        $this->project = $project;
+        $this->message = $message;
+    }
+
     public function index()
     {
-        $requests = ModelsRequest::all();
+        $requests = $this->request->all();
         return view('request.list', ['requests' => $requests]);
     }
 
@@ -21,8 +31,7 @@ class RequestController extends Controller
     {
         $project = null;
         if ($req->has('project_id')) {
-            $project = Project::where('id', $req->get('project_id'))
-                ->first();
+            $project = $this->project->getById($req->get('project_id'));
         }
 
         return view('request.add', [
@@ -32,7 +41,7 @@ class RequestController extends Controller
 
     public function store(StoreRequestRequest $req)
     {
-        $newRequest = ModelsRequest::create([
+        $newRequest = $this->request->create([
             'title' => $req->title,
             'description' => $req->description,
             'project_id' => $req->get('project_id')
@@ -43,9 +52,9 @@ class RequestController extends Controller
 
     public function show(int $id)
     {
-        $request = ModelsRequest::where('id', $id)->first();
-        $project = Project::where('id', $request->project_id)->first();
-        $messages = Message::where('request_id', $id)->get();
+        $request = $this->request->getById($id);
+        $project = $this->project->getById($request->project_id);
+        $messages = $this->message->getMessagesOfRequest($id);
 
         return view('request.show', [
             'request' => $request,
@@ -58,11 +67,10 @@ class RequestController extends Controller
     {
         $project = null;
         if ($req->has('project_id')) {
-            $project = Project::where('id', $req->get('project_id'))
-                ->first();
+            $project = $this->project->getById($req->get('project_id'));
         }
 
-        $request = ModelsRequest::where('id', $id)->first();
+        $request = $this->request->getById($id);
 
         return view('request.edit', [
             'request' => $request,
@@ -72,7 +80,7 @@ class RequestController extends Controller
 
     public function update(UpdateRequestRequest $req, int $id)
     {
-        $request = ModelsRequest::where('id', $id)->first();
+        $request = $this->request->getById($id);
 
         $request->update([
             'title' => $req->title,
@@ -82,18 +90,17 @@ class RequestController extends Controller
         return redirect('requests/' . $request->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
-    public function destroy(int $request_id)
+    public function destroy(int $id)
     {
-        $request = ModelsRequest::where('id', $request_id)->first();
+        $request = $this->request->getById($id);
         $request->delete();
 
         return to_route('dashboard');
     }
 
-    public function changeStatus(int $request_id)
+    public function changeStatus(int $id)
     {
-        $request = ModelsRequest::where('id', $request_id)
-            ->first();
+        $request = $this->request->getById($id);
 
         $request->update([
             'status' => $request->status == 0 ? 1 : 0

@@ -11,45 +11,57 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct(
+        User $user,
+        Project $project,
+        EmployeeEstimatedTime $employeeEstimatedTime,
+        ProjectEmployee $projectEmployee
+    ) {
+        $this->user = $user;
+        $this->project = $project;
+        $this->employeeEstimatedTime = $employeeEstimatedTime;
+        $this->projectEmployee = $projectEmployee;
+    }
+
     public function dashboard()
     {
         if (auth()->user() == null) {
             return to_route('login');
-        } else if (auth()->user()->role == 2) {
-            $projects = Project::all();
-            $employees_activity = EmployeeEstimatedTime::where('created_by_admin', false)
-                ->get();
+        }
+
+        if (auth()->user()->role == 2) {
+            $projects = $this->project->all();
+            $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity();
 
             return view('admin.dashboard', [
                 'projects' => $projects,
-                'employees_activity' => $employees_activity
-            ]);
-        } else if (auth()->user()->role == 1) {
-            $employee_project_ids = array_column(
-                ProjectEmployee::where(
-                    'employee_id',
-                    auth()->user()->id
-                )->get()->toArray(),
-                'project_id'
-            );
-
-            $projects = Project::where('id', $employee_project_ids)->get();
-
-            $employees_activity = EmployeeEstimatedTime::where(
-                'employee_id',
-                auth()->user()->id
-            )->get();
-
-            return view('employee.dashboard', [
-                'projects' => $projects,
-                'employees_activity' => $employees_activity
+                'employees_activity' => $employeeActivity
             ]);
         }
 
-        $projects = Project::where(
-            'customer_id',
+        if (auth()->user()->role == 1) {
+            $employeeProjectIds = array_column(
+                $this->projectEmployee->getProjectsOfEmployee(
+                    auth()->user()->id
+                )->toArray(),
+                'project_id'
+            );
+
+            $projects = $this->project->getProjectsFromIds($employeeProjectIds);
+
+            $employeeActivity = $this->employeeEstimatedTime->getActivityOfEmployee(
+                auth()->user()->id
+            );
+
+            return view('employee.dashboard', [
+                'projects' => $projects,
+                'employees_activity' => $employeeActivity
+            ]);
+        }
+
+        $projects = $this->project->getProjectsOfCustomer(
             auth()->user()->id
-        )->get();
+        );
 
         return view('customer.dashboard', [
             'projects' => $projects
@@ -58,7 +70,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
+        $users = $this->user->all();
         return view('user.list', ['users' => $users]);
     }
 
@@ -69,7 +81,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $newUser = User::create([
+        $newUser = $this->user->create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -80,41 +92,41 @@ class UserController extends Controller
         return redirect('users/' . $newUser->id . '/edit');
     }
 
-    public function show(int $user_id)
+    public function show(int $id)
     {
-        $user = User::where('id', $user_id)->first();
+        $user = $this->user->getById($id);
 
         return view('user.show', [
             'user' => $user
         ]);
     }
 
-    public function edit(int $user_id)
+    public function edit(int $id)
     {
-        $user = User::where('id', $user_id)->first();
+        $user = $this->user->getById($id);
 
         return view('user.edit', [
             'user' => $user,
         ]);
     }
 
-    public function update(Request $request, int $user_id)
+    public function update(Request $request, int $id)
     {
-        $user = User::where('id', $user_id)->first();
+        $user = $this->user->getById($id);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => isset($request->password) ? Hash::make($request->password) : $user->password,
-            'company' => $request->company,
-            'role' => $request->role
+            'company' => $request->company
         ]);
 
         return redirect('users/' . $user->id . '/edit');
     }
 
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
+        $user = $this->user->getById($id);
         $user->delete();
 
         return to_route('users');
