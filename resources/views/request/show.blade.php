@@ -62,6 +62,18 @@
                             <span class="me-3" data-bs-toggle="tooltip" data-bs-placement="left" title="{{ $message->created_at }}">
                                 {{ $message->text }}
                             </span>
+
+                            @if ($message['attach'] != null)
+                            @php
+                            $file_uri_path = $message['attach'];
+                            $uri_segments = explode('/', $file_uri_path);
+                            $file_name = $uri_segments[count($uri_segments) - 1];
+                            @endphp
+                            <a href="/download-file?file_uri={{ $message->attach }}">
+                                <span><?= $file_name ?></span>
+                                <i class="bi bi-file"></i>
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>

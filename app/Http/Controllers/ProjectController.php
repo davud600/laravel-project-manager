@@ -14,8 +14,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
-        return view('project.list', ['projects' => $projects]);
+        return view('project.list', ['projects' => Project::all()]);
     }
 
     public function create()
@@ -155,7 +154,8 @@ class ProjectController extends Controller
     {
         $project = Project::where('id', $project_id)->first();
         $project->delete();
-        return redirect()->intended('/dashboard');
+
+        return to_route('dashboard');
     }
 
     public function addEstimatedTime(Request $request, int $project_id)

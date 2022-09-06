@@ -84,7 +84,8 @@ class RequestController extends Controller
     {
         $request = ModelsRequest::where('id', $request_id)->first();
         $request->delete();
-        return redirect()->intended('/dashboard');
+
+        return to_route('dashboard');
     }
 
     public function changeStatus(int $request_id)

@@ -17,18 +17,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/profile', function () {
     return view('user.profile');
-});
+})->name('profile');
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('/dashboard', 'dashboard');
-});
+Route::get('/dashboard', [UserController::class, 'dashboard'])
+    ->name('dashboard');
 
+Route::get('/download-file', [MessageController::class, 'downloadFile']);
 
-Route::post('requests/{request_id}/create-message', [MessageController::class, 'store']);
+Route::post('/requests/{request_id}/create-message', [MessageController::class, 'store'])
+    ->name('create-message');
 
 include __DIR__ . '/auth.php';
 include __DIR__ . '/requests.php';

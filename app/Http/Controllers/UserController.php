@@ -14,7 +14,7 @@ class UserController extends Controller
     public function dashboard()
     {
         if (auth()->user() == null) {
-            return redirect('/login');
+            return to_route('login');
         } else if (auth()->user()->role == 2) {
             $projects = Project::all();
             $employees_activity = EmployeeEstimatedTime::where('created_by_admin', false)
@@ -116,13 +116,14 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect('users/');
+
+        return to_route('users');
     }
 
     public function profile()
     {
         if (auth()->user() == null) {
-            return redirect('/login');
+            return to_route('login');
         }
 
         return view('user.profile');

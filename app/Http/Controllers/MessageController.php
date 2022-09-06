@@ -4,28 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class MessageController extends Controller
 {
-    public function store(Request $request, int $request_id)
+    public function store(Request $request, int $requestId)
     {
-        $user_file = $request->userfile;
-        $file_path = null;
-        // if (is_uploaded_file($user_file) && !$user_file->hasMoved()) {
-        //     $file_path = 'uploads/' . $user_file->store();
-        // }
+        $filePath = $this->storeFile($request->file('userfile')) ?? null;
 
-        if (!isset($request->message)) {
-            return redirect('requests/' . $request_id);
+        if (!isset($request->message) && !$filePath) {
+            return redirect('requests/' . $requestId);
         }
 
         Message::create([
             'text' => $request->message,
-            'attach' => $file_path,
-            'request_id' => $request_id,
+            'attach' => $filePath,
+            'request_id' => $requestId,
             'created_by' => auth()->user()->id
         ]);
 
-        return redirect('requests/' . $request_id);
+        return redirect('requests/' . $requestId);
+    }
+
+    private function storeFile(UploadedFile $file = null)
+    {
+        if (!$file) {
+            return null;
+        }
+
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+
+        Storage::disk('local')
+            ->put('uploaded-files/' . $fileName, file_get_contents(($file)));
+
+
+        return 'uploaded-files/' . $fileName;
+    }
+
+    public function downloadFile(Request $request)
+    {
+        return Storage::download($request->file_uri);
     }
 }
