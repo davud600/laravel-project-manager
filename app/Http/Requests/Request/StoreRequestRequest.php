@@ -25,6 +25,7 @@ class StoreRequestRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
+            'description' => 'nullable',
             'project_id' => 'required'
         ];
     }

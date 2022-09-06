@@ -24,8 +24,10 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255',
-            'project_id' => 'required'
+            'title' => 'required|max:255|unique:projects',
+            'customer' => 'required',
+            'description' => 'nullable|max:225',
+            'estimated_time' => 'numeric'
         ];
     }
 
@@ -34,7 +36,9 @@ class StoreProjectRequest extends FormRequest
         return [
             'title.required' => 'Title is required!',
             'title.max' => 'Title too long!',
-            'project_id.required' => 'Invalid request!',
+            'title.unique' => 'Project with that title already exists!',
+            'description.max' => 'Description is too long!',
+            'customer.required' => 'Customer is required!'
         ];
     }
 }

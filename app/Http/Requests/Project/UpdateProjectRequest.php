@@ -25,7 +25,9 @@ class UpdateProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'customer' => 'required'
+            'description' => 'nullable|max:225',
+            'estimated_time' => 'numeric',
+            'status' => 'nullable'
         ];
     }
 
@@ -34,8 +36,7 @@ class UpdateProjectRequest extends FormRequest
         return [
             'title.required' => 'Title is required!',
             'title.max' => 'Title too long!',
-            'title.unique' => 'Project with that title already exists!',
-            'customer.required' => 'Customer is required!',
+            'description.max' => 'Description is too long!'
         ];
     }
 }

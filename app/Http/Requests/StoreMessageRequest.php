@@ -24,8 +24,8 @@ class StoreMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'text' => 'max:225|',
-            'userfile' => 'max:2048|mimes:pdf,docx,xlsx,jpg,png'
+            'text' => 'max:225|nullable',
+            'userfile' => 'nullable|max:2048|mimes:pdf,docx,xlsx,jpg,png'
         ];
     }
 
