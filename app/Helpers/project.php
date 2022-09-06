@@ -23,7 +23,7 @@ if (!function_exists('getHoursAndMinutesFromTime')) {
 }
 
 if (!function_exists('getTimeFromHoursAndMinutes')) {
-    function getTimeFromHoursAndMinutes(int $user_hours = 0, int $user_minutes = 0): int
+    function getTimeFromHoursAndMinutes($user_hours = 0, $user_minutes = 0): int
     {
         return ($user_hours * 60) + $user_minutes;
     }

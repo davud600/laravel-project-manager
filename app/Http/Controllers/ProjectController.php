@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\project;
 use App\Models\ProjectEmployee;
@@ -43,8 +44,7 @@ class ProjectController extends Controller
             'title' => $request->title,
             'customer_id' => $request->customer,
             'description' => $request->description,
-            'estimated_time' => $estimated_time,
-            'status' => 0
+            'estimated_time' => $estimated_time
         ]);
 
         EmployeeEstimatedTime::create([
@@ -62,17 +62,17 @@ class ProjectController extends Controller
         return redirect('projects/' . $newProject->id . '/edit');
     }
 
-    public function show(int $project_id)
+    public function show(int $id)
     {
-        $project = Project::where('id', $project_id)->first();
-        $employees_activity = EmployeeEstimatedTime::where('project_id', $project_id)
+        $project = Project::where('id', $id)->first();
+        $employees_activity = EmployeeEstimatedTime::where('project_id', $id)
             ->get();
-        $project_requests = ModelsRequest::where('project_id', $project_id)
+        $project_requests = ModelsRequest::where('project_id', $id)
             ->get();
 
         $projectEmployeesIds = array_column(
             ProjectEmployee::select('employee_id')
-                ->where('project_id', $project_id)->get()->toArray(),
+                ->where('project_id', $id)->get()->toArray(),
             'employee_id'
         );
 
@@ -89,15 +89,15 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function edit(int $project_id)
+    public function edit(int $id)
     {
-        $project = Project::where('id', $project_id)->first();
+        $project = Project::where('id', $id)->first();
         $allEmployees = User::where('role', 1)->get();
         $projectCustomer = User::where('id', $project->customer_id)->first();
         $customers = User::where('role', 0)->get();
 
         $projectEmployeesIds = ProjectEmployee::select('employee_id')
-            ->where('project_id', $project_id)->get();
+            ->where('project_id', $id)->get();
 
         $projectEmployees = User::where(
             'id',
@@ -113,9 +113,9 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $project_id)
+    public function update(UpdateProjectRequest $request, int $id)
     {
-        $project = Project::where('id', $project_id)->first();
+        $project = Project::where('id', $id)->first();
 
         $inputtedEmployees = getInputtedEmployees(
             $request
@@ -129,7 +129,7 @@ class ProjectController extends Controller
         if ($project->estimated_time != $estimated_time) {
             EmployeeEstimatedTime::create([
                 'employee_id' => auth()->user()->id,
-                'project_id' => $project_id,
+                'project_id' => $id,
                 'time_added' => getTimeFromHoursAndMinutes(
                     $request->hours,
                     $request->minutes
@@ -150,20 +150,20 @@ class ProjectController extends Controller
         return redirect('projects/' . $project->id . '/edit');
     }
 
-    public function destroy(int $project_id)
+    public function destroy(int $id)
     {
-        $project = Project::where('id', $project_id)->first();
+        $project = Project::where('id', $id)->first();
         $project->delete();
 
         return to_route('dashboard');
     }
 
-    public function addEstimatedTime(Request $request, int $project_id)
+    public function addEstimatedTime(Request $request, int $id)
     {
         EmployeeEstimatedTime::create([
             'description' => $request->description,
             'employee_id' => auth()->user()->id,
-            'project_id' => $project_id,
+            'project_id' => $id,
             'time_added' => getTimeFromHoursAndMinutes(
                 $request->hours,
                 $request->minutes
@@ -171,7 +171,7 @@ class ProjectController extends Controller
             'created_by_admin' => false
         ]);
 
-        $project = Project::where('id', $project_id)->first();
+        $project = Project::where('id', $id)->first();
         $project->update([
             'estimated_time' => $project->estimated_time + getTimeFromHoursAndMinutes(
                 $request->hours,
@@ -179,6 +179,6 @@ class ProjectController extends Controller
             )
         ]);
 
-        return redirect('projects/' . $project_id);
+        return redirect('projects/' . $id);
     }
 }
