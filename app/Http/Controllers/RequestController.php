@@ -54,7 +54,10 @@ class RequestController extends Controller
     {
         $request = $this->request->getById($id);
         $project = $this->project->getById($request->project_id);
-        $messages = $this->message->getMessagesOfRequest($id);
+        $messages = $this->message->getMessagesOfRequest(
+            $id,
+            withUser: true
+        );
 
         return view('request.show', [
             'request' => $request,

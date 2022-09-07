@@ -29,21 +29,45 @@ class EmployeeEstimatedTime extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getEmployeeActivity(): Collection
-    {
-        return $this->where('created_by_admin', false)
+    public function getEmployeeActivity(
+        bool $withEmployee = false,
+        bool $withProject = false
+    ): Collection {
+        return
+            $this->where('created_by_admin', false)
+            ->when($withEmployee, function ($query) {
+                $query->with('employee');
+            })->when($withProject, function ($query) {
+                $query->with('project');
+            })
             ->get();
     }
 
-    public function getActivityOfEmployee($employeeId): Collection
-    {
+    public function getActivityOfEmployee(
+        $employeeId,
+        bool $withEmployee = false,
+        bool $withProject = false
+    ): Collection {
         return $this->where('employee_id', $employeeId)
+            ->when($withEmployee, function ($query) {
+                $query->with('employee');
+            })->when($withProject, function ($query) {
+                $query->with('project');
+            })
             ->get();
     }
 
-    public function getActivityOfProject($projectId): Collection
-    {
+    public function getActivityOfProject(
+        $projectId,
+        bool $withEmployee = false,
+        bool $withProject = false
+    ): Collection {
         return $this->where('project_id', $projectId)
+            ->when($withEmployee, function ($query) {
+                $query->with('employee');
+            })->when($withProject, function ($query) {
+                $query->with('project');
+            })
             ->get();
     }
 }

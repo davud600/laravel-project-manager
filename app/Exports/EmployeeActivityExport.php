@@ -12,7 +12,7 @@ class EmployeeActivityExport implements FromCollection
      */
     public function collection()
     {
-        $employeeActivity = EmployeeEstimatedTime::all();
+        $employeeActivity = EmployeeEstimatedTime::with(['employee', 'project'])->get();
 
         foreach ($employeeActivity as $activity) {
             $activity->employee_id = $activity->employee->name;

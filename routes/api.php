@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ExcelDataController;
+use App\Permissions\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(ExcelDataController::class)->prefix('import')
-    ->group(function () {
-        Route::get('/users', 'importUsers');
-        Route::get('/projects', 'importProjects');
-        Route::get('/employee-activity', 'importEmployeeActivity');
+Route::controller(ExcelDataController::class)
+    ->prefix('import')->group(function () {
+        Route::middleware('can:' . Permission::IMPORT_EXCEL_DATA)->group(function () {
+            Route::get('/users', 'importUsers');
+            Route::get('/projects', 'importProjects');
+            Route::get('/employee-activity', 'importEmployeeActivity');
+        });
     });

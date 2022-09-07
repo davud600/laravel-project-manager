@@ -23,9 +23,12 @@ class Message extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function getMessagesOfRequest($requestId): Collection
+    public function getMessagesOfRequest($requestId, bool $withUser = false): Collection
     {
         return $this->where('request_id', $requestId)
+            ->when($withUser, function ($query) {
+                $query->with('user');
+            })
             ->get();
     }
 }

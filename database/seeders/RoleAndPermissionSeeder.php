@@ -33,6 +33,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => Permissions::DELETE_REQUESTS]);
         Permission::create(['name' => Permissions::CHANGE_STATUS_REQUESTS]);
 
+        Permission::create(['name' => Permissions::IMPORT_EXCEL_DATA]);
+
         $adminRole = Role::create(['name' => 'Admin']);
         $employeeRole = Role::create(['name' => 'Employee']);
         $customerRole = Role::create(['name' => 'Customer']);
@@ -48,7 +50,8 @@ class RoleAndPermissionSeeder extends Seeder
             Permissions::DELETE_PROJECTS,
             Permissions::LIST_REQUESTS,
             Permissions::DELETE_REQUESTS,
-            Permissions::CHANGE_STATUS_REQUESTS
+            Permissions::CHANGE_STATUS_REQUESTS,
+            Permissions::IMPORT_EXCEL_DATA
         ]);
 
         $employeeRole->givePermissionTo([

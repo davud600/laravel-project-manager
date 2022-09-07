@@ -20,4 +20,6 @@ class Permission
     public const EDIT_REQUESTS = 'edit-requests';
     public const DELETE_REQUESTS = 'delete-requests';
     public const CHANGE_STATUS_REQUESTS = 'change-status-requests';
+
+    public const IMPORT_EXCEL_DATA = 'import-excel-data';
 }

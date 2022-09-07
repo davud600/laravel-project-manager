@@ -79,8 +79,14 @@ class ProjectController extends Controller
 
     public function show(int $id)
     {
-        $project = $this->project->getById($id);
-        $employeeActivity = $this->employeeEstimatedTime->getActivityOfProject($id);
+        $project = $this->project->getById(
+            $id,
+            withCustomer: true
+        );
+        $employeeActivity = $this->employeeEstimatedTime->getActivityOfProject(
+            $id,
+            withEmployee: true
+        );
         $projectRequests = $this->request->getRequestsOfProject($id);
 
         $projectEmployeesIds = array_column(

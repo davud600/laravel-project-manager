@@ -30,8 +30,11 @@ class UserController extends Controller
         }
 
         if (auth()->user()->role == 2) {
-            $projects = $this->project->all();
-            $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity();
+            $projects = $this->project->with('customer')->get();
+            $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity(
+                withEmployee: true,
+                withProject: true
+            );
 
             return view('admin.dashboard', [
                 'projects' => $projects,
@@ -47,10 +50,15 @@ class UserController extends Controller
                 'project_id'
             );
 
-            $projects = $this->project->getProjectsFromIds($employeeProjectIds);
+            $projects = $this->project->getProjectsFromIds(
+                $employeeProjectIds,
+                withCustomer: true
+            );
 
             $employeeActivity = $this->employeeEstimatedTime->getActivityOfEmployee(
-                auth()->user()->id
+                auth()->user()->id,
+                withEmployee: true,
+                withProject: true
             );
 
             return view('employee.dashboard', [
