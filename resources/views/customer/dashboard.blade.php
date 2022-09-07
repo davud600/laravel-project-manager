@@ -36,7 +36,7 @@
                         '<span class="badge bg-success">Finished</span>'
                         !!}
                     </td>
-                    <td>{{ $project->customer_id }}</td>
+                    <td>{{ $project->customer->name }}</td>
                     <td>{{ $project->estimated_time }}</td>
                     <td>{{ $project->created_at }}</td>
                     <td>

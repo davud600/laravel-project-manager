@@ -18,6 +18,11 @@ class Message extends Model
         'created_by'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function getMessagesOfRequest($requestId): Collection
     {
         return $this->where('request_id', $requestId)

@@ -47,7 +47,7 @@
                         '<span class="badge bg-success">Finished</span>'
                         !!}
                     </td>
-                    <td>{{ getUserNameFromId($project->customer_id) }}</td>
+                    <td>{{ $project->customer->name }}</td>
                     <td>{{ getHoursAndMinutesFromTime($project->estimated_time) }}</td>
                     <td>{{ $project->created_at }}</td>
                     <td>
@@ -86,8 +86,8 @@
             <tbody>
                 @foreach ($employees_activity as $employee_activity)
                 <tr>
-                    <th scope="row">{{ getUserNameFromId($employee_activity->employee_id) }}</th>
-                    <td>{{ getProjectTitleFromId($employee_activity->project_id) }}</td>
+                    <th scope="row">{{ $employee_activity->employee->name }}</th>
+                    <td>{{ $employee_activity->project->title }}</td>
                     <td>{{ $employee_activity->description }}</td>
                     <td>{{ getHoursAndMinutesFromTime($employee_activity->time_added) }}</td>
                     <td>{{ $employee_activity->created_at }}</td>

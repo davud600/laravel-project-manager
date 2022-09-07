@@ -19,6 +19,16 @@ class EmployeeEstimatedTime extends Model
         'created_by_admin'
     ];
 
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getEmployeeActivity(): Collection
     {
         return $this->where('created_by_admin', false)

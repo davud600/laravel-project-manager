@@ -73,16 +73,16 @@ if (!function_exists('deleteAllEmployeesOfProject')) {
     }
 }
 
-if (!function_exists('getUserNameFromId')) {
-    function getUserNameFromId(int $user_id): string
-    {
-        return User::where('id', $user_id)->first()->name;
-    }
-}
+// if (!function_exists('getUserNameFromId')) {
+//     function getUserNameFromId(int $user_id): string
+//     {
+//         return User::where('id', $user_id)->first()->name;
+//     }
+// }
 
-if (!function_exists('getProjectTitleFromId')) {
-    function getProjectTitleFromId(int $project_id): string
-    {
-        return Project::where('id', $project_id)->first()->title;
-    }
-}
+// if (!function_exists('getProjectTitleFromId')) {
+//     function getProjectTitleFromId(int $project_id): string
+//     {
+//         return Project::where('id', $project_id)->first()->title;
+//     }
+// }

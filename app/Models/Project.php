@@ -36,6 +36,11 @@ class Project extends Model
         });
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getProjectsOfCustomer($customerId): Collection
     {
         return $this->where('customer_id', $customerId)

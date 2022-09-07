@@ -90,7 +90,7 @@
                 <div class="d-flex justify-content-start">
                     <div class="d-flex flex-column">
                         <div class="d-flex flex-row">
-                            <span class="fw-bold">{{ getUserNameFromId($message->created_by) }}:&nbsp;&nbsp;</span>
+                            <span class="fw-bold">{{ $message->user->name }}:&nbsp;&nbsp;</span>
                             <span class="me-3" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ $message->created_at }}">
                                 {{ $message->text }}
                             </span>

@@ -41,7 +41,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Customer</span>
-                <span>{{ getUserNameFromId($project->customer_id) }}</span>
+                <span>{{ $project->customer->name }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between">
                 <span class="fw-bold">Employees</span>
@@ -150,7 +150,7 @@
                         @if (auth()->user()->id == $employee_activity->employee_id)
                         (me)
                         @endif
-                        {{ getUserNameFromId($employee_activity->employee_id) }}
+                        {{ $employee_activity->employee->name }}
                     </th>
                     <td>{{ $employee_activity->description }}</td>
                     <td>
