@@ -17,9 +17,6 @@ class EmployeeActivityExport implements FromCollection
         foreach ($employeeActivity as $activity) {
             $activity->employee_id = $activity->employee->name;
             $activity->project_id = $activity->project->title;
-
-            // $activity->employee_id = getUserNameFromId($activity->employee_id);
-            // $activity->project_id = getProjectTitleFromId($activity->project_id);
         }
 
         return $employeeActivity;
