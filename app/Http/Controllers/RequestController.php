@@ -7,6 +7,7 @@ use App\Http\Requests\Request\UpdateRequestRequest;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\Request as ModelsRequest;
+use App\Models\UserReadMessage;
 use Illuminate\Http\Request;
 
 class RequestController extends Controller
@@ -14,11 +15,13 @@ class RequestController extends Controller
     public function __construct(
         ModelsRequest $request,
         Project $project,
-        Message $message
+        Message $message,
+        UserReadMessage $userReadMessage
     ) {
         $this->request = $request;
         $this->project = $project;
         $this->message = $message;
+        $this->userReadMessage = $userReadMessage;
     }
 
     public function index()
@@ -57,6 +60,10 @@ class RequestController extends Controller
         $messages = $this->message->getMessagesOfRequest(
             $id,
             withUser: true
+        );
+        $this->userReadMessage->readMessages(
+            $messages,
+            auth()->user()->id
         );
 
         return view('request.show', [
