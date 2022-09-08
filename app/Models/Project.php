@@ -33,6 +33,29 @@ class Project extends Model
             // delete requests
             Request::where('project_id', $project->id)
                 ->delete();
+
+            // send notification to customer
+            Notification::create([
+                'user_id' => $project->customer_id,
+                'created_by' => auth()->user()->id,
+                'type' => 2
+            ]);
+        });
+
+        static::created(function (Project $project) {
+            Notification::create([
+                'user_id' => $project->customer_id,
+                'created_by' => auth()->user()->id,
+                'type' => 0
+            ]);
+        });
+
+        static::updated(function (Project $project) {
+            Notification::create([
+                'user_id' => $project->customer_id,
+                'created_by' => auth()->user()->id,
+                'type' => 1
+            ]);
         });
     }
 

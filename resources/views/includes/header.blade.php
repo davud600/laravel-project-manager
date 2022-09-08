@@ -8,25 +8,48 @@
     </div>
     <!-- End Logo -->
 
-    <!-- <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
-            <button type="submit" title="Search">
-                <i class="bi bi-search"></i>
-            </button>
-        </form>
-    </div> -->
-    <!-- End Search Bar -->
-
     @if (auth()->user() !== null)
     @php
     $unreadMessages = getUnreadMessages();
+    $notifications = getUnreadNotifications();
     @endphp
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
             <li class="nav-item dropdown">
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" onclick="markNotisAsRead()">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-primary badge-number">{{ count($notifications) == 0 ? null : count($notifications) }}</span> </a><!-- End Notification Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                    <li class="dropdown-header">
+                        You have {{ count($notifications) }} new notifications
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+
+                    @foreach ($notifications as $notification)
+                    <li class="notification-item">
+                        <i class="bi bi-exclamation-circle text-warning"></i>
+                        <div>
+                            <h4>{{ $notification->creator->name }}</h4>
+                            <p>{{ getNotificationType($notification->type) }}</p>
+                            <p>{{ $notification->created_at }}</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    @endforeach
+                </ul>
+                <!-- End Notification Dropdown Items -->
+            </li>
+            <!-- End Notification Nav -->
+
+            <li class="nav-item dropdown">
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                    <i class="bi bi-chat-left-text ps-5"></i>
+                    <i class="bi bi-chat-left-text"></i>
                     <span class="badge bg-success badge-number">{{ count($unreadMessages) == 0 ? null : count($unreadMessages) }}</span> </a><!-- End Messages Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
@@ -122,3 +145,23 @@
     @endif
     <!-- End Icons Navigation -->
 </header>
+
+<script defer>
+    function markNotisAsRead() {
+        var el = document.createElement('div');
+        document.body.appendChild(el);
+        el.innerHTML = `
+                @php
+                if (isset($notifications)) {
+                    foreach ($notifications as $notification) {
+                        if ($notification->read == false) {
+                            $notification->update([
+                                'read' => true
+                            ]);
+                        }
+                    }
+                }
+                @endphp
+            `;
+    }
+</script>

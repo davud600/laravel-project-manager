@@ -25,6 +25,35 @@ class Request extends Model
             Message::where('request_id', $request->id)
                 ->delete();
         });
+
+        static::updated(function (Request $request) {
+            Notification::create([
+                'user_id' => Project::where('id', $request->project_id)
+                    ->first()
+                    ->customer_id,
+                'created_by' => auth()->user()->id,
+                'type' => 6
+            ]);
+        });
+
+        static::created(function (Request $request) {
+            $projectEmployee = new ProjectEmployee;
+            $projectEmployeesIds = array_column(
+                $projectEmployee->getEmployeesOfProject($request->project_id)
+                    ->toArray(),
+                'employee_id'
+            );
+            $projectEmployees = User::where('id', $projectEmployeesIds)
+                ->get();
+
+            foreach ($projectEmployees as $employee) {
+                Notification::create([
+                    'user_id' => $employee->id,
+                    'created_by' => auth()->user()->id,
+                    'type' => 5
+                ]);
+            }
+        });
     }
 
     public function getById($id): Request

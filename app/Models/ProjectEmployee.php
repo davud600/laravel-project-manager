@@ -16,6 +16,34 @@ class ProjectEmployee extends Model
         'employee_id'
     ];
 
+    public static function booted()
+    {
+        static::deleted(function (ProjectEmployee $projectEmployee) {
+            // send notification to employee
+            Notification::create([
+                'user_id' => $projectEmployee->employee_id,
+                'created_by' => auth()->user()->id,
+                'type' => 4
+            ]);
+        });
+
+        static::updated(function (ProjectEmployee $projectEmployee) {
+            Notification::create([
+                'user_id' => $projectEmployee->employee_id,
+                'created_by' => auth()->user()->id,
+                'type' => 1
+            ]);
+        });
+
+        static::created(function (ProjectEmployee $projectEmployee) {
+            Notification::create([
+                'user_id' => $projectEmployee->employee_id,
+                'created_by' => auth()->user()->id,
+                'type' => 3
+            ]);
+        });
+    }
+
     public function getProjectsOfEmployee($employeeId): Collection
     {
         return $this->where('employee_id', $employeeId)

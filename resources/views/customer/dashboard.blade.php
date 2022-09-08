@@ -23,7 +23,6 @@
                     <th scope="col">Estimated Time</th>
                     <th scope="col">Created at</th>
                     <th scope="col">Action</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -41,13 +40,6 @@
                     <td>{{ $project->created_at }}</td>
                     <td>
                         <a class="btn btn-primary" href="/projects/{{ $project->id }}">View</a>
-                    </td>
-                    <td>
-                        <form action="/projects/{{ $project->id }}" method="post">
-                            @csrf()
-                            @method('DELETE')
-                            <input type="submit" class="btn ps-2 pe-2 pt-0 pb-0" value="x">
-                        </form>
                     </td>
                 </tr>
                 @endforeach
