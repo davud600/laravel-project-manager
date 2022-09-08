@@ -64,28 +64,32 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getProjectsOfCustomer($customerId, bool $withCustomer = false): Collection
-    {
-        return $withCustomer ?
-            $this->where('customer_id', $customerId)
-            ->with('customer')
-            ->get() :
-            $this->where('customer_id', $customerId)
+    public function getProjectsOfCustomer(
+        $customerId,
+        bool $withCustomer = false
+    ): Collection {
+        return $this->where('customer_id', $customerId)
+            ->when($withCustomer, function ($query) {
+                $query->with('customer');
+            })
             ->get();
     }
 
-    public function getProjectsFromIds(array $projectIds, bool $withCustomer = false): Collection
-    {
-        return $withCustomer ?
-            $this->where('id', $projectIds)
-            ->with('customer')
-            ->get() :
-            $this->where('id', $projectIds)
+    public function getProjectsFromIds(
+        array $projectIds,
+        bool $withCustomer = false
+    ): Collection {
+        return $this->where('id', $projectIds)
+            ->when($withCustomer, function ($query) {
+                $query->with('customer');
+            })
             ->get();
     }
 
-    public function getById($id, bool $withCustomer = false): Project
-    {
+    public function getById(
+        $id,
+        bool $withCustomer = false
+    ): Project {
         return $this->where('id', $id)
             ->when($withCustomer, function ($query) {
                 $query->with('customer');
