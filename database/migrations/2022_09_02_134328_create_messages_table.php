@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->text('text')->nullable();
             $table->string('attach')->nullable();
-            $table->integer('request_id');
+            $table->integer('request_id'); // Use foreign id
             $table->integer('created_by');
             $table->timestamps();
             $table->softDeletes();

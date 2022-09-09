@@ -35,7 +35,8 @@ if (!function_exists('getUnreadNotifications')) {
         $unreadNotifications = ModelsNotification::where('user_id', auth()->user()->id)
             ->where('read', false)
             ->with('creator')
-            ->get();
+            ->get()
+            ->reverse();
 
         return $unreadNotifications;
     }

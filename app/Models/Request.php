@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\ProjectEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Mail;
 
 class Request extends Model
 {
@@ -52,6 +54,14 @@ class Request extends Model
                     'created_by' => auth()->user()->id,
                     'type' => 5
                 ]);
+
+                Mail::to($employee->email)
+                    ->send(new ProjectEmail(
+                        [
+                            'name' => 'One of your projects has a new request',
+                            'dob' => now()
+                        ]
+                    ));
             }
         });
     }
