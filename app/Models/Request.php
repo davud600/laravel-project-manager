@@ -29,16 +29,6 @@ class Request extends Model
                 ->delete();
         });
 
-        static::updated(function (Request $request) {
-            Notification::create([
-                'user_id' => Project::where('id', $request->project_id)
-                    ->first()
-                    ->customer_id,
-                'created_by' => auth()->user()->id,
-                'type' => 6
-            ]);
-        });
-
         static::created(function (Request $request) {
             $projectEmployee = new ProjectEmployee;
             $projectEmployeesIds = array_column(
