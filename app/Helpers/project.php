@@ -32,7 +32,7 @@ if (!function_exists('getTimeFromHoursAndMinutes')) {
 if (!function_exists('setEmployeesOfProject')) {
     function setEmployeesOfProject(int $project_id, array $employee_ids): void
     {
-        // del all initial employees if thers any
+        // del all initial employees if theres any
         deleteAllEmployeesOfProject($project_id);
 
         foreach ($employee_ids as $employee_id) {
