@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Mail\ProjectEmail;
+use App\Jobs\SendEmailJob;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Mail;
 
 class Project extends Model
 {
@@ -43,13 +42,13 @@ class Project extends Model
                 'type' => 2
             ]);
 
-            Mail::to($project->customer->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'One of your projects was deleted',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $project->customer->email,
+                [
+                    'name' => 'One of your projects was deleted',
+                    'dob' => now()
+                ]
+            );
         });
 
         static::created(function (Project $project) {
@@ -59,13 +58,13 @@ class Project extends Model
                 'type' => 0
             ]);
 
-            Mail::to($project->customer->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'A new project was created for you',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $project->customer->email,
+                [
+                    'name' => 'A new project was created for you',
+                    'dob' => now()
+                ]
+            );
         });
 
         static::updated(function (Project $project) {
@@ -75,13 +74,13 @@ class Project extends Model
                 'type' => 1
             ]);
 
-            Mail::to($project->customer->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'One of your projects was updated',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $project->customer->email,
+                [
+                    'name' => 'One of your projects was updated',
+                    'dob' => now()
+                ]
+            );
         });
     }
 

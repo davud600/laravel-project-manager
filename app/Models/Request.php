@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use App\Mail\ProjectEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,13 +56,13 @@ class Request extends Model
                     'type' => 5
                 ]);
 
-                Mail::to($employee->email)
-                    ->send(new ProjectEmail(
-                        [
-                            'name' => 'One of your projects has a new request',
-                            'dob' => now()
-                        ]
-                    ));
+                SendEmailJob::dispatch(
+                    $employee->email,
+                    [
+                        'name' => 'One of your projects has a new request',
+                        'dob' => now()
+                    ]
+                );
             }
         });
     }

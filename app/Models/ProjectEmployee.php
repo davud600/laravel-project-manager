@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\SendEmailJob;
 use App\Mail\ProjectEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,13 +29,13 @@ class ProjectEmployee extends Model
                 'type' => 4
             ]);
 
-            Mail::to($projectEmployee->employee->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'One of your projects was deleted',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $projectEmployee->employee->email,
+                [
+                    'name' => 'One of your projects was deleted',
+                    'dob' => now()
+                ]
+            );
         });
 
         static::updated(function (ProjectEmployee $projectEmployee) {
@@ -44,13 +45,13 @@ class ProjectEmployee extends Model
                 'type' => 1
             ]);
 
-            Mail::to($projectEmployee->employee->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'One of your projects was updated',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $projectEmployee->employee->email,
+                [
+                    'name' => 'One of your projects was updated',
+                    'dob' => now()
+                ]
+            );
         });
 
         static::created(function (ProjectEmployee $projectEmployee) {
@@ -60,13 +61,13 @@ class ProjectEmployee extends Model
                 'type' => 3
             ]);
 
-            Mail::to($projectEmployee->employee->email)
-                ->send(new ProjectEmail(
-                    [
-                        'name' => 'You were added to a project as an employee',
-                        'dob' => now()
-                    ]
-                ));
+            SendEmailJob::dispatch(
+                $projectEmployee->employee->email,
+                [
+                    'name' => 'You were added to a project as an employee',
+                    'dob' => now()
+                ]
+            );
         });
     }
 
