@@ -53,12 +53,11 @@ class RequestController extends Controller
         return redirect('requests/' . $newRequest->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
-    public function show(int $id)
+    public function show(ModelsRequest $request)
     {
-        $request = $this->request->getById($id);
         $project = $this->project->getById($request->project_id);
         $messages = $this->message->getMessagesOfRequest(
-            $id,
+            $request->id,
             withUser: true
         );
         $this->userReadMessage->readMessages(
@@ -73,14 +72,12 @@ class RequestController extends Controller
         ]);
     }
 
-    public function edit(Request $req, int $id)
+    public function edit(Request $req, ModelsRequest $request)
     {
         $project = null;
         if ($req->has('project_id')) {
             $project = $this->project->getById($req->get('project_id'));
         }
-
-        $request = $this->request->getById($id);
 
         return view('request.edit', [
             'request' => $request,
@@ -88,10 +85,8 @@ class RequestController extends Controller
         ]);
     }
 
-    public function update(UpdateRequestRequest $req, int $id)
+    public function update(UpdateRequestRequest $req, ModelsRequest $request)
     {
-        $request = $this->request->getById($id);
-
         $request->update([
             'title' => $req->title,
             'description' => $req->description
@@ -100,18 +95,14 @@ class RequestController extends Controller
         return redirect('requests/' . $request->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
-    public function destroy(int $id)
+    public function destroy(ModelsRequest $request)
     {
-        $request = $this->request->getById($id);
         $request->delete();
-
         return to_route('dashboard');
     }
 
-    public function changeStatus(int $id)
+    public function changeStatus(ModelsRequest $request)
     {
-        $request = $this->request->getById($id);
-
         $request->update([
             'status' => $request->status == 0 ? 1 : 0
         ]);

@@ -77,20 +77,16 @@ class ProjectController extends Controller
         return redirect('projects/' . $newProject->id . '/edit');
     }
 
-    public function show(int $id)
+    public function show(Project $project)
     {
-        $project = $this->project->getById(
-            $id,
-            withCustomer: true
-        );
         $employeeActivity = $this->employeeEstimatedTime->getActivityOfProject(
-            $id,
+            $project->id,
             withEmployee: true
         );
-        $projectRequests = $this->request->getRequestsOfProject($id);
+        $projectRequests = $this->request->getRequestsOfProject($project->id);
 
         $projectEmployeesIds = array_column(
-            $this->projectEmployee->getEmployeesOfProject($id)->toArray(),
+            $this->projectEmployee->getEmployeesOfProject($project->id)->toArray(),
             'employee_id'
         );
 
@@ -104,15 +100,14 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function edit(int $id)
+    public function edit(Project $project)
     {
-        $project = $this->project->getById($id);
         $allEmployees = $this->user->getEmployees();
         $projectCustomer = $this->user->getById($project->customer_id);
         $customers = $this->user->getCustomers();
 
         $projectEmployeesIds = array_column(
-            $this->projectEmployee->getEmployeesOfProject($id)->toArray(),
+            $this->projectEmployee->getEmployeesOfProject($project->id)->toArray(),
             'employee_id'
         );
 
@@ -127,10 +122,8 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function update(UpdateProjectRequest $request, int $id)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project = $this->project->getById($id);
-
         $inputtedEmployees = getInputtedEmployees(
             $request
         );
@@ -143,7 +136,7 @@ class ProjectController extends Controller
         if ($project->estimated_time != $estimated_time) {
             $this->employeeEstimatedTime->create([
                 'employee_id' => auth()->user()->id,
-                'project_id' => $id,
+                'project_id' => $project->id,
                 'time_added' => getTimeFromHoursAndMinutes(
                     $request->hours,
                     $request->minutes
@@ -164,20 +157,18 @@ class ProjectController extends Controller
         return redirect('projects/' . $project->id . '/edit');
     }
 
-    public function destroy(int $id)
+    public function destroy(Project $project)
     {
-        $project = $this->project->getById($id);
         $project->delete();
-
         return to_route('dashboard');
     }
 
-    public function addEstimatedTime(Request $request, int $id)
+    public function addEstimatedTime(Request $request, Project $project)
     {
         $this->employeeEstimatedTime->create([
             'description' => $request->description,
             'employee_id' => auth()->user()->id,
-            'project_id' => $id,
+            'project_id' => $project->id,
             'time_added' => getTimeFromHoursAndMinutes(
                 $request->hours,
                 $request->minutes
@@ -185,7 +176,6 @@ class ProjectController extends Controller
             'created_by_admin' => false
         ]);
 
-        $project = $this->project->getById($id);
         $project->update([
             'estimated_time' => $project->estimated_time + getTimeFromHoursAndMinutes(
                 $request->hours,
@@ -193,6 +183,6 @@ class ProjectController extends Controller
             )
         ]);
 
-        return redirect('projects/' . $id);
+        return redirect('projects/' . $project->id);
     }
 }

@@ -159,7 +159,7 @@
             <select name="employee${inputtedEmployees.length}" id="floatingSelect" class="form-select position-relative" aria-label="State">
                 @foreach ($allEmployees as $employee)
                     <option value="{!! $employee['id'] !!}">
-                        {!! $employee['name'] !!}
+                        {{ $employee['name'] }}
                     </option>
                 @endforeach
             </select>

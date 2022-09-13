@@ -100,19 +100,15 @@ class UserController extends Controller
         return redirect('users/' . $newUser->id . '/edit');
     }
 
-    public function show(int $id)
+    public function show(User $user)
     {
-        $user = $this->user->getById($id);
-
         return view('user.show', [
             'user' => $user
         ]);
     }
 
-    public function edit(int $id)
+    public function edit(User $user)
     {
-        $user = $this->user->getById($id);
-
         return view('user.edit', [
             'user' => $user,
         ]);
@@ -132,11 +128,9 @@ class UserController extends Controller
         return redirect('users/' . $user->id . '/edit');
     }
 
-    public function destroy(int $id)
+    public function destroy(User $user)
     {
-        $user = $this->user->getById($id);
         $user->delete();
-
         return to_route('users');
     }
 

@@ -93,17 +93,6 @@
     var inputtedEmployees = [];
 
     function addEmployee() {
-        // var employeesEl = document.getElementById('employees');
-        // var container = document.createElement('div');
-        // container.className = 'mb-3 col-3';
-        // var smallerContainer = document.createElement('div');
-        // smallerContainer.className = 'relative m-0 mb-2 form-floating';
-        // var employeeSelect = document.createElement('select');
-        // employeeSelect.className = 'form-select position-relative';
-        // employeeSelect.setAttribute('id', 'floatingSelect');
-        // employeeSelect.setAttribute('name', `employee${inputtedEmployees.length}`);
-        // employeeSelect.setAttribute('aria-label', 'State');
-
         const employeesElement = document.getElementById('employees');
 
         employeesElement.innerHTML += `
@@ -112,7 +101,7 @@
             <select name="employee${inputtedEmployees.length}" id="floatingSelect" class="form-select position-relative" aria-label="State">
                 @foreach ($employees as $employee)
                     <option value="{!! $employee['id'] !!}">
-                        {!! $employee['name'] !!}
+                        {{ $employee['name'] }}
                     </option>
                 @endforeach
             </select>
