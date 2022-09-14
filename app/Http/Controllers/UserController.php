@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchRequest;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\Project;
 use App\Models\ProjectEmployee;
@@ -23,14 +24,18 @@ class UserController extends Controller
         $this->projectEmployee = $projectEmployee;
     }
 
-    public function dashboard()
+    public function dashboard(SearchRequest $request)
     {
         if (auth()->user() == null) {
             return to_route('login');
         }
 
         if (auth()->user()->role == 2) {
-            $projects = $this->project->with('customer')->get();
+            $projects = $this->project
+                ->latest()
+                ->filter($request->only('query'))
+                ->with('customer')
+                ->get();
             $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity(
                 withEmployee: true,
                 withProject: true
@@ -52,7 +57,8 @@ class UserController extends Controller
 
             $projects = $this->project->getProjectsFromIds(
                 $employeeProjectIds,
-                withCustomer: true
+                withCustomer: true,
+                filters: $request->only('query')
             );
 
             $employeeActivity = $this->employeeEstimatedTime->getActivityOfEmployee(
@@ -68,7 +74,8 @@ class UserController extends Controller
         }
 
         $projects = $this->project->getProjectsOfCustomer(
-            auth()->user()->id
+            auth()->user()->id,
+            filters: $request->only('query')
         );
 
         return view('customer.dashboard', [
@@ -76,9 +83,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(SearchRequest $request)
     {
-        $users = $this->user->all();
+        $users = $this->user
+            ->latest()
+            ->filter($request->only('query'))
+            ->get();
+
         return view('user.list', ['users' => $users]);
     }
 

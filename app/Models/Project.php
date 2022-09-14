@@ -84,6 +84,13 @@ class Project extends Model
         });
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['query'] ?? false, function ($query, $search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        });
+    }
+
     public function customer()
     {
         return $this->belongsTo(User::class);
@@ -91,22 +98,30 @@ class Project extends Model
 
     public function getProjectsOfCustomer(
         $customerId,
-        bool $withCustomer = false
+        bool $withCustomer = false,
+        array $filters
     ): Collection {
         return $this->where('customer_id', $customerId)
             ->when($withCustomer, function ($query) {
                 $query->with('customer');
+            })
+            ->when($filters ?? false, function ($query, $filters) {
+                $this->scopeFilter($query, $filters);
             })
             ->get();
     }
 
     public function getProjectsFromIds(
         array $projectIds,
-        bool $withCustomer = false
+        bool $withCustomer = false,
+        array $filters
     ): Collection {
         return $this->where('id', $projectIds)
             ->when($withCustomer, function ($query) {
                 $query->with('customer');
+            })
+            ->when($filters ?? false, function ($query, $filters) {
+                $this->scopeFilter($query, $filters);
             })
             ->get();
     }

@@ -62,6 +62,14 @@ class User extends Authenticatable
         });
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['query'] ?? false, function ($query, $search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('company', 'like', '%' . $search . '%');
+        });
+    }
+
     public function getById($id): User
     {
         return $this->where('id', $id)

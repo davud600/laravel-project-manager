@@ -15,13 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-Route::get('/profile', function () {
-    return view('user.profile');
-})->name('profile');
+Route::get('/', fn () => view('welcome'));
+Route::get('/profile', fn () => view('user.profile'))
+    ->name('profile');
 
 Route::get('/dashboard', [UserController::class, 'dashboard'])
     ->name('dashboard');
