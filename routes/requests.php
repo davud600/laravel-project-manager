@@ -5,11 +5,6 @@ use App\Permissions\Permission;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(RequestController::class)->group(function () {
-    Route::middleware('can:' . Permission::LIST_REQUESTS)->group(function () {
-        Route::get('/requests', 'index');
-        Route::get('/requests/{request}', 'show');
-    });
-
     Route::middleware('can:' . Permission::CREATE_REQUESTS)->group(function () {
         Route::get('/requests/create', 'create');
         Route::post('/requests/create', 'store');
@@ -26,5 +21,10 @@ Route::controller(RequestController::class)->group(function () {
 
     Route::middleware('can:' . Permission::CHANGE_STATUS_REQUESTS)->group(function () {
         Route::get('/requests/{request}/change-status', 'changeStatus');
+    });
+
+    Route::middleware('can:' . Permission::LIST_REQUESTS)->group(function () {
+        Route::get('/requests', 'index');
+        Route::get('/requests/{request}', 'show');
     });
 });
