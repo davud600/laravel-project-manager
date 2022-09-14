@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
+use App\Permissions\Permission;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', fn () => view('welcome'));
-Route::get('/profile', fn () => view('user.profile'))
-    ->name('profile');
+Route::middleware('can:' . Permission::LIST_PROJECTS) // if logged in
+    ->get('/profile', fn () => view('user.profile'));
 
 Route::get('/dashboard', [UserController::class, 'dashboard'])
     ->name('dashboard');

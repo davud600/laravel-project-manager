@@ -144,13 +144,4 @@ class UserController extends Controller
         $user->delete();
         return to_route('users');
     }
-
-    public function profile()
-    {
-        if (auth()->user() == null) {
-            return to_route('login');
-        }
-
-        return view('user.profile');
-    }
 }
