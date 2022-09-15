@@ -32,7 +32,6 @@ class UserController extends Controller
 
         if (auth()->user()->role == 2) {
             $projects = $this->project
-                ->latest()
                 ->filter([
                     'query' => $request->get('query'),
                     'limit' => ($request->get('limit') ?? 1) * 10
@@ -52,17 +51,12 @@ class UserController extends Controller
         }
 
         if (auth()->user()->role == 1) {
-            $employeeProjectIds = array_column(
-                $this->projectEmployee->getProjectsOfEmployee(
-                    auth()->user()->id
-                )->toArray(),
-                'project_id'
-            );
-
-            $projects = $this->project->getProjectsFromIds(
-                $employeeProjectIds,
-                withCustomer: true,
-                filters: $request->only('query')
+            $projects = $this->projectEmployee->getProjectsOfEmployee(
+                auth()->user()->id,
+                filters: [
+                    'query' => $request->get('query'),
+                    'limit' => ($request->get('limit') ?? 1) * 10
+                ]
             );
 
             $employeeActivity = $this->employeeEstimatedTime->getActivityOfEmployee(
@@ -79,7 +73,10 @@ class UserController extends Controller
 
         $projects = $this->project->getProjectsOfCustomer(
             auth()->user()->id,
-            filters: $request->only('query')
+            filters: [
+                'query' => $request->get('query'),
+                'limit' => ($request->get('limit') ?? 1) * 10
+            ]
         );
 
         return view('customer.dashboard', [

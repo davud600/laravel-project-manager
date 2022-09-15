@@ -105,26 +105,11 @@ class Project extends Model
     }
 
     public function getProjectsOfCustomer(
-        $customerId,
+        int $customerId,
         bool $withCustomer = false,
         array $filters
     ): Collection {
         return $this->where('customer_id', $customerId)
-            ->when($withCustomer, function ($query) {
-                $query->with('customer');
-            })
-            ->when($filters ?? false, function ($query, $filters) {
-                $this->scopeFilter($query, $filters);
-            })
-            ->get();
-    }
-
-    public function getProjectsFromIds(
-        array $projectIds,
-        bool $withCustomer = false,
-        array $filters
-    ): Collection {
-        return $this->where('id', $projectIds)
             ->when($withCustomer, function ($query) {
                 $query->with('customer');
             })

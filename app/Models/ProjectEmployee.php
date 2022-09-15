@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use App\Jobs\SendEmailJob;
-use App\Mail\ProjectEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Mail;
 
 class ProjectEmployee extends Model
 {
@@ -76,13 +74,35 @@ class ProjectEmployee extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getProjectsOfEmployee($employeeId): Collection
+    public function project()
     {
-        return $this->where('employee_id', $employeeId)
-            ->get();
+        return $this->belongsTo(Project::class);
     }
 
-    public function getEmployeesOfProject($projectId): Collection
+    public function getProjectsOfEmployee(int $employeeId, array $filters)
+    {
+        return $this->where('employee_id', $employeeId)
+            ->with('project')
+            ->with('project.customer')
+            ->when(
+                $filters['query'] ?? false,
+                fn ($query, $search) =>
+                $query->whereHas(
+                    'project',
+                    fn ($query) =>
+                    $query->where('title', 'like', '%' . $search . '%')
+                )
+            )
+            ->when(
+                $filters['limit'] ?? false,
+                fn ($query, $limit) =>
+                $query->limit($limit)
+            )
+            ->get()
+            ->pluck('project');
+    }
+
+    public function getEmployeesOfProject($projectId)
     {
         return $this->select('employee_id')
             ->where('project_id', $projectId)
