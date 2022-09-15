@@ -10,6 +10,7 @@
 
     <div class="search-bar mt-3">
         <form class="search-form d-flex align-items-center" method="get">
+            <input type="hidden" name="limit" value="{{ request()->get('limit') ?? null }}">
             <input value="{{ $_GET['query'] ?? null }}" type="text" name="query" placeholder="Search" title="Enter search keyword" />
             <button type="submit" title="Search">
                 <i class="bi bi-search"></i>

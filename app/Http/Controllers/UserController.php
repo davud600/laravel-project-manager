@@ -33,9 +33,13 @@ class UserController extends Controller
         if (auth()->user()->role == 2) {
             $projects = $this->project
                 ->latest()
-                ->filter($request->only('query'))
+                ->filter([
+                    'query' => $request->get('query'),
+                    'limit' => ($request->get('limit') ?? 1) * 10
+                ])
                 ->with('customer')
                 ->get();
+
             $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity(
                 withEmployee: true,
                 withProject: true

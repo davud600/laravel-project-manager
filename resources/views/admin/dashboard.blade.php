@@ -65,6 +65,12 @@
             </tbody>
         </table>
         <!-- End Table with hoverable rows -->
+        <form method="get">
+            <input type="hidden" name="query" value="{{ request()->get('query') ?? null }}">
+            <button type="submit" name="limit" value="{{ (request()->get('limit') ?? 1) + 1}}">
+                Show More
+            </button>
+        </form>
     </div>
 </div>
 

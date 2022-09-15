@@ -86,9 +86,17 @@ class Project extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['query'] ?? false, function ($query, $search) {
-            $query->where('title', 'like', '%' . $search . '%');
-        });
+        $query->when(
+            $filters['query'] ?? false,
+            fn ($query, $search) =>
+            $query->where('title', 'like', '%' . $search . '%')
+        );
+
+        $query->when(
+            $filters['limit'] ?? false,
+            fn ($query, $limit) =>
+            $query->limit($limit)
+        );
     }
 
     public function customer()
