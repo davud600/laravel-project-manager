@@ -35,7 +35,7 @@
                 <span class="fw-bold">Role</span>
                 <span>
                     {{
-                        $user->role == 0 ? 'Customer' : ($user->role == 1 ? 'Employee': 'Admin')
+                        $user->role == 3 ? 'Customer' : ($user->role == 2 ? 'Employee': 'Admin')
                     }}
                 </span>
             </li>

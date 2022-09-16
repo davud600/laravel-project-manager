@@ -21,7 +21,7 @@ class AdminSeeder extends Seeder
             'email' => 'd@gmail.com',
             'password' => Hash::make('chkdsk34'),
             'company' => "d's company",
-            'role' => 2,
+            'role' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);

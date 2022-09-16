@@ -83,7 +83,7 @@
                     <td>{{ $user->email }}</td>
                     <td>
                         {{
-                            $user->role == 0 ? 'Customer' : ($user->role == 1 ? 'Employee': 'Admin')
+                            $user->role == 3 ? 'Customer' : ($user->role == 2 ? 'Employee': 'Admin')
                         }}
                     </td>
                     <td>{{ $user->company }}</td>

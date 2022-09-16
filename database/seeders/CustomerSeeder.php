@@ -21,7 +21,7 @@ class CustomerSeeder extends Seeder
             'email' => 'c@gmail.com',
             'password' => Hash::make('chkdsk34'),
             'company' => "c's company",
-            'role' => 0,
+            'role' => 3,
             'created_at' => now(),
             'updated_at' => now()
         ]);

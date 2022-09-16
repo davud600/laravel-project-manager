@@ -50,16 +50,17 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function (User $user) {
+        static::created(
+            fn (User $user) =>
             // Assign role
             $user->assignRole(
                 match ($user->role) {
-                    2 => 'Admin',
-                    1 => 'Employee',
-                    0 => 'Customer'
+                    1 => 'Admin',
+                    2 => 'Employee',
+                    3 => 'Customer'
                 }
-            );
-        });
+            )
+        );
     }
 
     public function scopeFilter($query, array $filters)
@@ -68,13 +69,19 @@ class User extends Authenticatable
             $filters['query'] ?? false,
             fn ($query, $search) =>
             $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('company', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
         );
 
         $query->when(
             $filters['limit'] ?? false,
             fn ($query, $limit) =>
             $query->limit($limit)
+        );
+
+        $query->when(
+            $filters['role'] ?? false,
+            fn ($query, $role) =>
+            $query->where('role', $role)
         );
     }
 
