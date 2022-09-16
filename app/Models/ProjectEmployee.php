@@ -52,6 +52,12 @@ class ProjectEmployee extends Model
         });
 
         static::created(function (ProjectEmployee $projectEmployee) {
+            // find projectEmployee row that has same project and employee
+            ProjectEmployee::where('project_id', $projectEmployee->project_id)
+                ->where('employee_id', $projectEmployee->employee_id)
+                ->where('id', '!=', $projectEmployee->id)
+                ->first();
+
             Notification::create([
                 'user_id' => $projectEmployee->employee_id,
                 'created_by' => auth()->user()->id,

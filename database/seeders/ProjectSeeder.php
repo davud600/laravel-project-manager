@@ -21,15 +21,26 @@ class ProjectSeeder extends Seeder
                 'description' => 'Descriprion for project ' . $i,
                 'status' => 0,
                 'estimated_time' => 1800,
-                'customer_id' => 3,
+                'customer_id' => rand(30, 39),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
 
-            DB::table('project_employees')->insert([
-                'project_id' => $i,
-                'employee_id' => 2
-            ]);
+            for ($j = 0; $j < rand(1, 9); $j++) {
+                $employeeId = rand(20, 29);
+
+                if (
+                    DB::table('project_employees')
+                    ->where('project_id', $i)
+                    ->where('employee_id', $employeeId)
+                    ->first() == null
+                ) {
+                    DB::table('project_employees')->insert([
+                        'project_id' => $i,
+                        'employee_id' => $employeeId
+                    ]);
+                }
+            }
         }
     }
 }

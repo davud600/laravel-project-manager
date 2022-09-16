@@ -99,13 +99,13 @@ class User extends Authenticatable
 
     public function getEmployees(): Collection
     {
-        return $this->where('role', 1)
+        return $this->where('role', 2)
             ->get();
     }
 
     public function getCustomers(): Collection
     {
-        return $this->where('role', 0)
+        return $this->where('role', 3)
             ->get();
     }
 }
