@@ -83,6 +83,12 @@ class User extends Authenticatable
             fn ($query, $role) =>
             $query->where('role', $role)
         );
+
+        $query->when(
+            $filters['timeRegistered'] ?? false,
+            fn ($query, $days) =>
+            $query->where('created_at', '>=', now()->addDays(-$days))
+        );
     }
 
     public function getById($id): User

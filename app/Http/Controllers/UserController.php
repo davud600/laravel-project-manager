@@ -53,7 +53,8 @@ class UserController extends Controller
             ->filter([
                 'query' => $request->get('query'),
                 'limit' => ($request->get('limit') ?? 1) * 10,
-                'role' => $request->get('role')
+                'role' => $request->get('role'),
+                'timeRegistered' => $request->get('time_registered')
             ])
             ->get();
 
