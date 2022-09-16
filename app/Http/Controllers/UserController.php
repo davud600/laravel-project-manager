@@ -7,6 +7,9 @@ use App\Models\EmployeeEstimatedTime;
 use App\Models\Project;
 use App\Models\ProjectEmployee;
 use App\Models\User;
+use App\Repositories\AdminRepository;
+use App\Repositories\CustomerRepository;
+use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,58 +33,16 @@ class UserController extends Controller
             return to_route('login');
         }
 
-        if (auth()->user()->role == 2) {
-            $projects = $this->project
-                ->filter([
-                    'query' => $request->get('query'),
-                    'limit' => ($request->get('limit') ?? 1) * 10
-                ])
-                ->with('customer')
-                ->get();
+        $filters = [
+            'query' => $request->get('query'),
+            'limit' => ($request->get('limit') ?? 1) * 10
+        ];
 
-            $employeeActivity = $this->employeeEstimatedTime->getEmployeeActivity(
-                withEmployee: true,
-                withProject: true
-            );
-
-            return view('admin.dashboard', [
-                'projects' => $projects,
-                'employees_activity' => $employeeActivity
-            ]);
-        }
-
-        if (auth()->user()->role == 1) {
-            $projects = $this->projectEmployee->getProjectsOfEmployee(
-                auth()->user()->id,
-                filters: [
-                    'query' => $request->get('query'),
-                    'limit' => ($request->get('limit') ?? 1) * 10
-                ]
-            );
-
-            $employeeActivity = $this->employeeEstimatedTime->getActivityOfEmployee(
-                auth()->user()->id,
-                withEmployee: true,
-                withProject: true
-            );
-
-            return view('employee.dashboard', [
-                'projects' => $projects,
-                'employees_activity' => $employeeActivity
-            ]);
-        }
-
-        $projects = $this->project->getProjectsOfCustomer(
-            auth()->user()->id,
-            filters: [
-                'query' => $request->get('query'),
-                'limit' => ($request->get('limit') ?? 1) * 10
-            ]
-        );
-
-        return view('customer.dashboard', [
-            'projects' => $projects
-        ]);
+        return match (auth()->user()->role) {
+            2 => AdminRepository::dashboard($filters),
+            1 => EmployeeRepository::dashboard($filters),
+            0 => CustomerRepository::dashboard($filters)
+        };
     }
 
     public function index(SearchRequest $request)
