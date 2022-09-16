@@ -11,6 +11,7 @@ use App\Repositories\AdminRepository;
 use App\Repositories\CustomerRepository;
 use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -49,10 +50,19 @@ class UserController extends Controller
     {
         $users = $this->user
             ->latest()
-            ->filter($request->only('query'))
+            ->filter([
+                'query' => $request->get('query'),
+                'limit' => ($request->get('limit') ?? 1) * 10,
+                'role' => $request->get('role')
+            ])
             ->get();
 
-        return view('user.list', ['users' => $users]);
+        $roles = DB::table('roles')->get();
+
+        return view('user.list', [
+            'users' => $users,
+            'roles' => $roles
+        ]);
     }
 
     public function create()

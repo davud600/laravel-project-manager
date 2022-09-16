@@ -64,10 +64,18 @@ class User extends Authenticatable
 
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['query'] ?? false, function ($query, $search) {
+        $query->when(
+            $filters['query'] ?? false,
+            fn ($query, $search) =>
             $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('company', 'like', '%' . $search . '%');
-        });
+                ->orWhere('company', 'like', '%' . $search . '%')
+        );
+
+        $query->when(
+            $filters['limit'] ?? false,
+            fn ($query, $limit) =>
+            $query->limit($limit)
+        );
     }
 
     public function getById($id): User
