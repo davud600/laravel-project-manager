@@ -19,17 +19,6 @@
                     <input type="hidden" name="query" value="{{ request()->get('query') ?? null }}">
                     <div class="mt-2 d-flex gap-5">
                         <div class="d-flex gap-1 mb-3">
-                            <label class="col-sm-4 col-form-label">Customer: </label>
-                            <div class="col-sm-9">
-                                <select name="customer" class="form-select" aria-label="Default select example">
-                                    <option value="" {{ request()->get('customer') == null ? 'selected':'' }}>Select Customer</option>
-                                    @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id }}" {{ request()->get('customer') == $customer->id ? 'selected':'' }}>{{ $customer->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-flex gap-1 mb-3">
                             <label class="col-sm-5 col-form-label">Registered: </label>
                             <div class="col-sm-8">
                                 <select name="time_registered" class="form-select" aria-label="Default select example">
@@ -77,7 +66,7 @@
                         !!}
                     </td>
                     <td>{{ auth()->user()->name }}</td>
-                    <td>{{ $project->estimated_time }}</td>
+                    <td>{{ getHoursAndMinutesFromTime($project->estimated_time) }}</td>
                     <td>{{ $project->created_at }}</td>
                     <td>
                         <a class="btn btn-primary" href="/projects/{{ $project->id }}">View</a>

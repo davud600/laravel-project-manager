@@ -6,7 +6,6 @@ use App\Models\EmployeeEstimatedTime;
 use App\Models\ProjectEmployee;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository implements RepositoryInterface
 {

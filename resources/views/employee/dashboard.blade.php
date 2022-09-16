@@ -77,7 +77,7 @@
                         !!}
                     </td>
                     <td>{{ $project->customer->name }}</td>
-                    <td>{{ $project->estimated_time }}</td>
+                    <td>{{ getHoursAndMinutesFromTime($project->estimated_time) }}</td>
                     <td>{{ $project->created_at }}</td>
                     <td>
                         <a class="btn btn-primary" href="/projects/{{ $project->id }}">View</a>

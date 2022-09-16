@@ -99,9 +99,9 @@ class Project extends Model
         );
 
         $query->when(
-            $filters['role'] ?? false,
-            fn ($query, $role) =>
-            $query->where('role', $role)
+            $filters['customer'] ?? false,
+            fn ($query, $customer) =>
+            $query->where('customer_id', $customer)
         );
 
         $query->when(

@@ -103,6 +103,15 @@ class ProjectEmployee extends Model
                 fn ($query, $limit) =>
                 $query->limit($limit)
             )
+            ->when(
+                $filters['customer'] ?? false,
+                fn ($query, $customer) =>
+                $query->whereHas(
+                    'project',
+                    fn ($query) =>
+                    $query->where('customer_id', $customer)
+                )
+            )
             ->get()
             ->pluck('project');
     }
