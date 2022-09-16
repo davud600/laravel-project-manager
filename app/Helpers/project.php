@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Project;
 use App\Models\ProjectEmployee;
 use Illuminate\Http\Request;
-use App\Models\User;
 
 if (!function_exists('getHoursAndMinutesFromTime')) {
     function getHoursAndMinutesFromTime(int $time): string
@@ -72,17 +70,3 @@ if (!function_exists('deleteAllEmployeesOfProject')) {
             ->delete();
     }
 }
-
-// if (!function_exists('getUserNameFromId')) {
-//     function getUserNameFromId(int $user_id): string
-//     {
-//         return User::where('id', $user_id)->first()->name;
-//     }
-// }
-
-// if (!function_exists('getProjectTitleFromId')) {
-//     function getProjectTitleFromId(int $project_id): string
-//     {
-//         return Project::where('id', $project_id)->first()->title;
-//     }
-// }

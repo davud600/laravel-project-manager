@@ -32,10 +32,9 @@ class RequestController extends Controller
 
     public function create(Request $req)
     {
-        $project = null;
-        if ($req->has('project_id')) {
-            $project = $this->project->getById($req->get('project_id'));
-        }
+        $project = $req->has('project_id') ?
+            $this->project->getById($req->get('project_id')) :
+            null;
 
         return view('request.add', [
             'project' => $project

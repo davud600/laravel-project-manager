@@ -84,13 +84,7 @@ class ProjectController extends Controller
             withEmployee: true
         );
         $projectRequests = $this->request->getRequestsOfProject($project->id);
-
-        $projectEmployeesIds = array_column(
-            $this->projectEmployee->getEmployeesOfProject($project->id)->toArray(),
-            'employee_id'
-        );
-
-        $projectEmployees = $this->user->getUsersByIds($projectEmployeesIds);
+        $projectEmployees = $this->projectEmployee->getEmployeesOfProject($project->id);
 
         return view('project.show', [
             'project' => $project,
@@ -105,13 +99,7 @@ class ProjectController extends Controller
         $allEmployees = $this->user->getEmployees();
         $projectCustomer = $this->user->getById($project->customer_id);
         $customers = $this->user->getCustomers();
-
-        $projectEmployeesIds = array_column(
-            $this->projectEmployee->getEmployeesOfProject($project->id)->toArray(),
-            'employee_id'
-        );
-
-        $projectEmployees = $this->user->getUsersByIds($projectEmployeesIds);
+        $projectEmployees = $this->projectEmployee->getEmployeesOfProject($project->id);
 
         return view('project.edit', [
             'project' => $project,

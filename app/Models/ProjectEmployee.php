@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Jobs\SendEmailJob;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -102,10 +101,11 @@ class ProjectEmployee extends Model
             ->pluck('project');
     }
 
-    public function getEmployeesOfProject($projectId)
+    public function getEmployeesOfProject(int $projectId)
     {
-        return $this->select('employee_id')
-            ->where('project_id', $projectId)
-            ->get();
+        return $this->where('project_id', $projectId)
+            ->with('employee')
+            ->get()
+            ->pluck('employee');
     }
 }

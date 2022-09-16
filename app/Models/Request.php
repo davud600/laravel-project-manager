@@ -31,13 +31,7 @@ class Request extends Model
 
         static::created(function (Request $request) {
             $projectEmployee = new ProjectEmployee;
-            $projectEmployeesIds = array_column(
-                $projectEmployee->getEmployeesOfProject($request->project_id)
-                    ->toArray(),
-                'employee_id'
-            );
-            $projectEmployees = User::where('id', $projectEmployeesIds)
-                ->get();
+            $projectEmployees = $projectEmployee->getEmployeesOfProject($request->project_id);
 
             foreach ($projectEmployees as $employee) {
                 Notification::create([

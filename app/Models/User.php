@@ -87,10 +87,4 @@ class User extends Authenticatable
         return $this->where('role', 0)
             ->get();
     }
-
-    public function getUsersByIds(array $userIds): Collection
-    {
-        return $this->where('id', $userIds)
-            ->get();
-    }
 }
