@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
 class CustomerRepository implements RepositoryInterface
 {
@@ -17,7 +19,8 @@ class CustomerRepository implements RepositoryInterface
         );
 
         return view('customer.dashboard', [
-            'projects' => $projects
+            'projects' => $projects,
+            'customers' => User::where('role', 3)->get()
         ]);
     }
 }

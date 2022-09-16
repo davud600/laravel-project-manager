@@ -36,13 +36,15 @@ class UserController extends Controller
 
         $filters = [
             'query' => $request->get('query'),
-            'limit' => ($request->get('limit') ?? 1) * 10
+            'limit' => ($request->get('limit') ?? 1) * 10,
+            'customer' => $request->get('customer'),
+            'timeRegistered' => $request->get('time_registered')
         ];
 
         return match (auth()->user()->role) {
-            2 => AdminRepository::dashboard($filters),
-            1 => EmployeeRepository::dashboard($filters),
-            0 => CustomerRepository::dashboard($filters)
+            1 => AdminRepository::dashboard($filters),
+            2 => EmployeeRepository::dashboard($filters),
+            3 => CustomerRepository::dashboard($filters)
         };
     }
 

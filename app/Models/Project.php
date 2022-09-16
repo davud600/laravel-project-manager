@@ -97,6 +97,18 @@ class Project extends Model
             fn ($query, $limit) =>
             $query->limit($limit)
         );
+
+        $query->when(
+            $filters['role'] ?? false,
+            fn ($query, $role) =>
+            $query->where('role', $role)
+        );
+
+        $query->when(
+            $filters['timeRegistered'] ?? false,
+            fn ($query, $days) =>
+            $query->where('created_at', '>=', now()->addDays(-$days))
+        );
     }
 
     public function customer()

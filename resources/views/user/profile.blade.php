@@ -15,7 +15,7 @@
                 <h2>{{ auth()->user()->name }}</h2>
                 <h3>
                     {{
-                        auth()->user()->role == 0 ? 'Customer' : (auth()->user()->role == 1 ? 'Employee': 'Admin')
+                        auth()->user()->role == 3 ? 'Customer' : (auth()->user()->role == 2 ? 'Employee': 'Admin')
                     }}
                 </h3>
             </div>

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\EmployeeEstimatedTime;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 
 class AdminRepository implements RepositoryInterface
@@ -23,7 +24,8 @@ class AdminRepository implements RepositoryInterface
 
         return view('admin.dashboard', [
             'projects' => $projects,
-            'employees_activity' => $employeeActivity
+            'employees_activity' => $employeeActivity,
+            'customers' => User::where('role', 3)->get()
         ]);
     }
 }

@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Models\EmployeeEstimatedTime;
 use App\Models\ProjectEmployee;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository implements RepositoryInterface
 {
@@ -26,7 +28,8 @@ class EmployeeRepository implements RepositoryInterface
 
         return view('employee.dashboard', [
             'projects' => $projects,
-            'employees_activity' => $employeeActivity
+            'employees_activity' => $employeeActivity,
+            'customers' => User::where('role', 3)->get()
         ]);
     }
 }

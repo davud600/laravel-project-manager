@@ -11,6 +11,7 @@
     <div class="search-bar mt-3">
         <form class="search-form d-flex align-items-center" method="get">
             <input type="hidden" name="time_registered" value="{{ request()->get('time_registered') ?? null }}">
+            <input type="hidden" name="customer" value="{{ request()->get('customer') ?? null }}">
             <input type="hidden" name="role" value="{{ request()->get('role') ?? null }}">
             <input type="hidden" name="limit" value="{{ request()->get('limit') ?? null }}">
             <input value="{{ $_GET['query'] ?? null }}" type="text" name="query" placeholder="Search" title="Enter search keyword" />
@@ -107,7 +108,7 @@
                         <h6>{{ auth()->user()->name }}</h6>
                         <span>
                             {{
-                                auth()->user()->role == 0 ? 'Customer' : (auth()->user()->role == 1 ? 'Employee': 'Admin')
+                                auth()->user()->role == 3 ? 'Customer' : (auth()->user()->role == 2 ? 'Employee': 'Admin')
                             }}
                         </span>
                     </li>
