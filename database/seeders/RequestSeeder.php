@@ -18,7 +18,7 @@ class RequestSeeder extends Seeder
             $projectId = rand(1, 100);
 
             DB::table('requests')->insert([
-                'title' => 'Request' . $i . 'for project ' . $projectId,
+                'title' => 'Request ' . $i . ' for project ' . $projectId,
                 'description' => 'I am requesting a new feature for this project, I want a new feature.',
                 'project_id' => $projectId,
                 'status' => 0,

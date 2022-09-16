@@ -68,8 +68,11 @@ class User extends Authenticatable
         $query->when(
             $filters['query'] ?? false,
             fn ($query, $search) =>
-            $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%')
+            $query->where(
+                fn ($query) =>
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+            )
         );
 
         $query->when(
