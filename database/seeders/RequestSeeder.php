@@ -14,22 +14,17 @@ class RequestSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('requests')->insert([
-            'title' => 'First Request of this project',
-            'description' => 'I want new feature. (This one is a finished request)',
-            'project_id' => 1,
-            'status' => 1,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        for ($i = 0; $i < 125; $i++) {
+            $projectId = rand(1, 100);
 
-        DB::table('requests')->insert([
-            'title' => 'Second Request of this project',
-            'description' => 'I am requesting a new feature for this project, I want a new feature.',
-            'project_id' => 1,
-            'status' => 0,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+            DB::table('requests')->insert([
+                'title' => 'Request' . $i . 'for project ' . $projectId,
+                'description' => 'I am requesting a new feature for this project, I want a new feature.',
+                'project_id' => $projectId,
+                'status' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
     }
 }
