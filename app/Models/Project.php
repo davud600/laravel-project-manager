@@ -116,6 +116,11 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+    // public function setEstimatedTimeAttribute($estimatedTime)
+    // {
+    //     $this->attributes['estimated_time'] = $estimatedTime;
+    // }
+
     public function getProjectsOfCustomer(
         int $customerId,
         bool $withCustomer = false,

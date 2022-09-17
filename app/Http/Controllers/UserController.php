@@ -75,6 +75,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // Change how were setting attributes
         $newUser = $this->user->create([
             'name' => $request->name,
             'email' => $request->email,

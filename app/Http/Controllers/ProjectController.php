@@ -55,6 +55,7 @@ class ProjectController extends Controller
             $request->minutes
         );
 
+        // change
         $newProject = $this->project->create([
             'title' => $request->title,
             'customer_id' => $request->customer,
@@ -62,6 +63,7 @@ class ProjectController extends Controller
             'estimated_time' => $estimated_time
         ]);
 
+        // change
         $this->employeeEstimatedTime->create([
             'employee_id' => auth()->user()->id,
             'project_id' => $newProject->id,
