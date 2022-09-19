@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -95,9 +96,11 @@ class User extends Authenticatable
         );
     }
 
-    public function setPasswordAttribute($password)
+    protected function password(): Attribute
     {
-        $this->attributes['password'] = Hash::make($password);
+        return Attribute::make(
+            set: fn ($password) => Hash::make($password)
+        );
     }
 
     public function getById($id): User
