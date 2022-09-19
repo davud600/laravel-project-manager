@@ -31,6 +31,7 @@
         <form class="row g-3" method="post">
             @csrf
             @method('POST')
+            <input type="hidden" name="project_id" value="0">
             <div class="col-md-8">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="title" name="title" placeholder="Request Title" required>

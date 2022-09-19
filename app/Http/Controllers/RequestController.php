@@ -43,12 +43,7 @@ class RequestController extends Controller
 
     public function store(StoreRequestRequest $req)
     {
-        $newRequest = $this->request->create([
-            'title' => $req->title,
-            'description' => $req->description,
-            'project_id' => $req->get('project_id')
-        ]);
-
+        $newRequest = $this->request->create($req->all());
         return redirect('requests/' . $newRequest->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
@@ -86,11 +81,7 @@ class RequestController extends Controller
 
     public function update(UpdateRequestRequest $req, ModelsRequest $request)
     {
-        $request->update([
-            'title' => $req->title,
-            'description' => $req->description
-        ]);
-
+        $request->update($req->all());
         return redirect('requests/' . $request->id . '/edit?project_id=' . $req->get('project_id'));
     }
 
