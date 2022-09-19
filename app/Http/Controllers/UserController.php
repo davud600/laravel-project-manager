@@ -12,7 +12,6 @@ use App\Repositories\CustomerRepository;
 use App\Repositories\EmployeeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -76,7 +75,6 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $newUser = $this->user->create($request->all());
-
         return redirect('users/' . $newUser->id . '/edit');
     }
 
@@ -94,17 +92,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, User $user)
     {
-        $user = $this->user->getById($id);
+        if (!isset($request->password)) {
+            $request->request->remove('password');
+        }
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => isset($request->password) ? Hash::make($request->password) : $user->password,
-            'company' => $request->company
-        ]);
-
+        $user->update($request->all());
         return redirect('users/' . $user->id . '/edit');
     }
 
