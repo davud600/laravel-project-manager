@@ -127,6 +127,16 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(ProjectEmployee::class)->with('employee');
+    }
+
     protected function estimatedTime(): Attribute
     {
         return Attribute::make(

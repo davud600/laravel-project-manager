@@ -16,14 +16,10 @@ class ProjectController extends Controller
     public function __construct(
         User $user,
         Project $project,
-        ModelsRequest $request,
-        ProjectEmployee $projectEmployee,
         EmployeeEstimatedTime $employeeEstimatedTime
     ) {
         $this->user = $user;
         $this->project = $project;
-        $this->request = $request;
-        $this->projectEmployee = $projectEmployee;
         $this->employeeEstimatedTime = $employeeEstimatedTime;
     }
 
@@ -35,12 +31,9 @@ class ProjectController extends Controller
 
     public function create()
     {
-        $employees = $this->user->getEmployees();
-        $customers = $this->user->getCustomers();
-
         return view('project.add', [
-            'employees' => $employees,
-            'customers' => $customers
+            'employees' => $this->user->getEmployees(),
+            'customers' => $this->user->getCustomers()
         ]);
     }
 
@@ -58,30 +51,23 @@ class ProjectController extends Controller
             $project->id,
             withEmployee: true
         );
-        $projectRequests = $this->request->getRequestsOfProject($project->id);
-        $projectEmployees = $this->projectEmployee->getEmployeesOfProject($project->id);
 
         return view('project.show', [
             'project' => $project,
-            'employees' => $projectEmployees,
+            'employees' => $project->employees->pluck('employee'),
             'employees_activity' => $employeeActivity,
-            'project_requests' => $projectRequests
+            'project_requests' => $project->requests
         ]);
     }
 
     public function edit(Project $project)
     {
-        $allEmployees = $this->user->getEmployees();
-        $projectCustomer = $this->user->getById($project->customer_id);
-        $customers = $this->user->getCustomers();
-        $projectEmployees = $this->projectEmployee->getEmployeesOfProject($project->id);
-
         return view('project.edit', [
             'project' => $project,
-            'allEmployees' => $allEmployees,
-            'projectEmployees' => $projectEmployees,
-            'customers' => $customers,
-            'projectCustomer' => $projectCustomer
+            'allEmployees' => $this->user->getEmployees(),
+            'projectEmployees' => $project->employees->pluck('employee'),
+            'customers' => $this->user->getCustomers(),
+            'projectCustomer' => $this->user->getById($project->customer_id)
         ]);
     }
 

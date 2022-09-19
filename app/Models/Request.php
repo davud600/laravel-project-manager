@@ -50,6 +50,11 @@ class Request extends Model
         });
     }
 
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     protected function projectId(): Attribute
     {
         return Attribute::make(

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->integer('estimated_time')->default(0);
-            $table->integer('customer_id');
+            $table->foreignIdFor(User::class, 'customer_id');
             $table->timestamps();
             $table->softDeletes();
         });

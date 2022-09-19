@@ -84,19 +84,6 @@ class ProjectEmployee extends Model
         return $this->belongsTo(Project::class);
     }
 
-    // public function setEmployeeIdAttribute()
-    // {
-    //     $this->attributes['employee_id'] = auth()->user()->id;
-    // }
-
-    // public function setTimeAddedAttribute($hours, $minutes)
-    // {
-    //     $this->attributes['time_added'] = getTimeFromHoursAndMinutes(
-    //         $hours,
-    //         $minutes
-    //     );
-    // }
-
     public function getProjectsOfEmployee(int $employeeId, array $filters)
     {
         return $this->where('employee_id', $employeeId)
