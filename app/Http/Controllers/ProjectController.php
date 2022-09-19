@@ -6,8 +6,6 @@ use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\EmployeeEstimatedTime;
 use App\Models\project;
-use App\Models\ProjectEmployee;
-use App\Models\Request as ModelsRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 

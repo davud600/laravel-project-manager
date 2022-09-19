@@ -25,7 +25,7 @@ class Message extends Model
 
     public function request()
     {
-        return $this->belongsTo(Request::class, 'request_id', 'id');
+        return $this->belongsTo(Request::class);
     }
 
     public function getMessagesOfRequest($requestId, bool $withUser = false): Collection

@@ -55,6 +55,11 @@ class Request extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
     protected function projectId(): Attribute
     {
         return Attribute::make(
@@ -66,11 +71,5 @@ class Request extends Model
     {
         return $this->where('id', $id)
             ->first();
-    }
-
-    public function getRequestsOfProject($projectId): Collection
-    {
-        return $this->where('project_id', $projectId)
-            ->get();
     }
 }

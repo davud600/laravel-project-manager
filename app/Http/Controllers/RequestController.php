@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Request\StoreRequestRequest;
 use App\Http\Requests\Request\UpdateRequestRequest;
-use App\Models\Message;
 use App\Models\Project;
 use App\Models\Request as ModelsRequest;
 use App\Models\UserReadMessage;
@@ -15,12 +14,10 @@ class RequestController extends Controller
     public function __construct(
         ModelsRequest $request,
         Project $project,
-        Message $message,
         UserReadMessage $userReadMessage
     ) {
         $this->request = $request;
         $this->project = $project;
-        $this->message = $message;
         $this->userReadMessage = $userReadMessage;
     }
 
@@ -50,10 +47,7 @@ class RequestController extends Controller
     public function show(ModelsRequest $request)
     {
         $project = $this->project->getById($request->project_id);
-        $messages = $this->message->getMessagesOfRequest(
-            $request->id,
-            withUser: true
-        );
+        $messages = $request->messages;
         $this->userReadMessage->readMessages(
             $messages,
             auth()->user()->id
