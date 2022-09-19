@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->text('text')->nullable();
             $table->string('attach')->nullable();
-            $table->foreignId('request_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('request_id');
             $table->foreignIdFor(User::class, 'created_by');
             $table->timestamps();
             $table->softDeletes();

@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('project_employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id');
-            $table->foreignIdFor(User::class, 'employee_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'employee_id');
             $table->timestamps();
             $table->softDeletes();
         });

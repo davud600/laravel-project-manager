@@ -17,7 +17,6 @@ return new class extends Migration
         Schema::create('employee_estimated_times', function (Blueprint $table) {
             $table->id();
             $table->string('description')->nullable();
-            $table->integer('employee_id');
             $table->foreignIdFor(User::class, 'employee_id');
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
             $table->integer('time_added');
