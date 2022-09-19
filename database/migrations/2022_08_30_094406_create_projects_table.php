@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->integer('estimated_time')->default(0);
-            $table->foreignIdFor(User::class, 'customer_id');
+            $table->foreignIdFor(User::class, 'customer_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

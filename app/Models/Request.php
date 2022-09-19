@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Jobs\SendEmailJob;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,8 +28,7 @@ class Request extends Model
         });
 
         static::created(function (Request $request) {
-            $projectEmployee = new ProjectEmployee;
-            $projectEmployees = $projectEmployee->getEmployeesOfProject($request->project_id);
+            $projectEmployees = $request->project->employees->pluck('employee');
 
             foreach ($projectEmployees as $employee) {
                 Notification::create([

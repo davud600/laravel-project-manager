@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-4">
                 <div class="mb-3 form-floating">
-                    <select name="customer" class="form-select" id="floatingSelect" aria-label="State">
+                    <select name="customer_id" class="form-select" id="floatingSelect" aria-label="State">
                         @foreach ($customers as $customer)
                         @if ($projectCustomer->id == $customer->id)
                         <option value="{{ $customer->id }}" selected>

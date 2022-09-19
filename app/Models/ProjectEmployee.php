@@ -115,12 +115,4 @@ class ProjectEmployee extends Model
             ->get()
             ->pluck('project');
     }
-
-    public function getEmployeesOfProject(int $projectId)
-    {
-        return $this->where('project_id', $projectId)
-            ->with('employee')
-            ->get()
-            ->pluck('employee');
-    }
 }
