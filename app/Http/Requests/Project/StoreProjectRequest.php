@@ -25,7 +25,7 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|max:255|unique:projects',
-            'customer' => 'required',
+            'customer_id' => 'required',
             'description' => 'nullable|max:225',
             'estimated_time' => 'numeric'
         ];
@@ -38,7 +38,7 @@ class StoreProjectRequest extends FormRequest
             'title.max' => 'Title too long!',
             'title.unique' => 'Project with that title already exists!',
             'description.max' => 'Description is too long!',
-            'customer.required' => 'Customer is required!'
+            'customer_id.required' => 'Customer is required!'
         ];
     }
 }

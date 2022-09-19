@@ -31,6 +31,10 @@
         <form class="row g-3" method="post" action="/projects/{{ $project->id }}">
             @csrf
             @method('PUT')
+            <input type="hidden" name="estimated_time" value="0">
+            <input type="hidden" name="time_added" value="0">
+            <input type="hidden" name="employee_id" value="0">
+            <input type="hidden" name="created_by_admin" value="0">
             <div class="col-md-8">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="title" name="title" placeholder="Project Title" value="{{ $project->title }}" required>

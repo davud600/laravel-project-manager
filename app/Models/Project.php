@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\SendEmailJob;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +53,10 @@ class Project extends Model
         });
 
         static::created(function (Project $project) {
+            $attributes = request()->all();
+            $attributes['project_id'] = $project->id;
+            EmployeeEstimatedTime::create($attributes);
+
             Notification::create([
                 'user_id' => $project->customer_id,
                 'created_by' => auth()->user()->id,
@@ -68,6 +73,12 @@ class Project extends Model
         });
 
         static::updated(function (Project $project) {
+            if (request()->get('estimated_time') != $project->estimated_time) {
+                $attributes = request()->all();
+                $attributes['project_id'] = $project->id;
+                EmployeeEstimatedTime::create($attributes);
+            }
+
             Notification::create([
                 'user_id' => $project->customer_id,
                 'created_by' => auth()->user()->id,
@@ -116,20 +127,21 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function setEstimatedTimeAttribute($estimatedTime)
-    // {
-    //     $this->attributes['estimated_time'] = $estimatedTime;
-    // }
+    protected function estimatedTime(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => $value + getTimeFromHoursAndMinutes(
+                request()->post('hours'),
+                request()->post('minutes')
+            )
+        );
+    }
 
     public function getProjectsOfCustomer(
         int $customerId,
-        bool $withCustomer = false,
         array $filters
     ): Collection {
         return $this->where('customer_id', $customerId)
-            ->when($withCustomer, function ($query) {
-                $query->with('customer');
-            })
             ->when($filters ?? false, function ($query, $filters) {
                 $this->scopeFilter($query, $filters);
             })

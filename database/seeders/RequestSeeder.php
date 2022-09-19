@@ -14,7 +14,7 @@ class RequestSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 125; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $projectId = rand(1, 100);
 
             DB::table('requests')->insert([

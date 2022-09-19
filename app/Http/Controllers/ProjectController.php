@@ -46,35 +46,8 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request)
     {
-        $inputtedEmployees = getInputtedEmployees(
-            $request
-        );
-
-        $estimated_time = getTimeFromHoursAndMinutes(
-            $request->hours,
-            $request->minutes
-        );
-
-        // change
-        $newProject = $this->project->create([
-            'title' => $request->title,
-            'customer_id' => $request->customer,
-            'description' => $request->description,
-            'estimated_time' => $estimated_time
-        ]);
-
-        // change
-        $this->employeeEstimatedTime->create([
-            'employee_id' => auth()->user()->id,
-            'project_id' => $newProject->id,
-            'time_added' => getTimeFromHoursAndMinutes(
-                $request->hours,
-                $request->minutes
-            ),
-            'created_by_admin' => true
-        ]);
-
-        setEmployeesOfProject($newProject->id, $inputtedEmployees);
+        $newProject = $this->project->create($request->all());
+        $this->storeProjectEmployees($request, $newProject->id);
 
         return redirect('projects/' . $newProject->id . '/edit');
     }
@@ -114,35 +87,8 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $inputtedEmployees = getInputtedEmployees(
-            $request
-        );
-
-        $estimated_time = getTimeFromHoursAndMinutes(
-            $request->hours,
-            $request->minutes
-        );
-
-        if ($project->estimated_time != $estimated_time) {
-            $this->employeeEstimatedTime->create([
-                'employee_id' => auth()->user()->id,
-                'project_id' => $project->id,
-                'time_added' => getTimeFromHoursAndMinutes(
-                    $request->hours,
-                    $request->minutes
-                ),
-                'created_by_admin' => true
-            ]);
-        }
-
-        $project->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'estimated_time' => $estimated_time,
-            'status' => $request->status
-        ]);
-
-        setEmployeesOfProject($project->id, $inputtedEmployees);
+        $project->update($request->all());
+        $this->storeProjectEmployees($request, $project->id);
 
         return redirect('projects/' . $project->id . '/edit');
     }
@@ -155,24 +101,22 @@ class ProjectController extends Controller
 
     public function addEstimatedTime(Request $request, Project $project)
     {
-        $this->employeeEstimatedTime->create([
-            'description' => $request->description,
-            'employee_id' => auth()->user()->id,
-            'project_id' => $project->id,
-            'time_added' => getTimeFromHoursAndMinutes(
-                $request->hours,
-                $request->minutes
-            ),
-            'created_by_admin' => false
-        ]);
-
+        $attributes = $request->all();
+        $attributes['project_id'] = $project->id;
+        $this->employeeEstimatedTime->create($attributes);
         $project->update([
-            'estimated_time' => $project->estimated_time + getTimeFromHoursAndMinutes(
-                $request->hours,
-                $request->minutes
-            )
+            'estimated_time' => $project->estimated_time
         ]);
 
         return redirect('projects/' . $project->id);
+    }
+
+    private function storeProjectEmployees(Request $request, int $projectId)
+    {
+        // Set employees
+        $inputtedEmployees = getInputtedEmployees(
+            $request
+        );
+        setEmployeesOfProject($projectId, $inputtedEmployees);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,30 @@ class EmployeeEstimatedTime extends Model
     public function employee()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function employeeId(): Attribute
+    {
+        return Attribute::make(
+            set: fn () => auth()->user()->id
+        );
+    }
+
+    protected function timeAdded(): Attribute
+    {
+        return Attribute::make(
+            set: fn () => getTimeFromHoursAndMinutes(
+                request()->post('hours'),
+                request()->post('minutes')
+            )
+        );
+    }
+
+    protected function createdByAdmin(): Attribute
+    {
+        return Attribute::make(
+            set: fn () => auth()->user()->role == 1
+        );
     }
 
     public function getEmployeeActivity(

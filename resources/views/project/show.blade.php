@@ -58,6 +58,9 @@
                     <form class="d-flex w-75 gap-2" action="{{ $project->id}}/change-estimated-time" method="post">
                         @csrf()
                         @method('POST')
+                        <input type="hidden" name="time_added" value="0">
+                        <input type="hidden" name="employee_id" value="0">
+                        <input type="hidden" name="created_by_admin" value="0">
                         <label for="description" class="fw-light mt-2">Description</label>
                         <input type="text" class="form-control" name="description" id="description">
                         <input min="0" type="number" class="form-control ms-2 w-50" name="hours" id="hours">
