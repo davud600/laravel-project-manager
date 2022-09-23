@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', function () {
+    return response()->json([
+        'bossi' => 'boss'
+    ]);
+});
+
 Route::get('/', fn () => view('welcome'));
 Route::middleware('can:' . Permission::LIST_PROJECTS) // if logged in
     ->get('/profile', fn () => view('user.profile'));
