@@ -5,7 +5,7 @@
         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
             <div class="py-4 d-flex justify-content-center">
                 <a href="index.html" class="w-auto logo d-flex align-items-center">
-                    <img src="assets/img/logo.png" alt="" />
+                    <img src="/assets/img/logo.png" alt="" />
                     <span class="d-none d-lg-block">NiceAdmin</span>
                 </a>
             </div>

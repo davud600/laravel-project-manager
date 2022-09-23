@@ -6,7 +6,7 @@
 
             <div class="py-4 d-flex justify-content-center">
                 <a href="index.html" class="w-auto logo d-flex align-items-center">
-                    <img src="assets/img/logo.png" alt="">
+                    <img src="/assets/img/logo.png" alt="">
                     <span class="d-none d-lg-block">NiceAdmin</span>
                 </a>
             </div><!-- End Logo -->

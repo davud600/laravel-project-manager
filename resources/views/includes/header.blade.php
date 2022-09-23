@@ -1,7 +1,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
         <a href="/" class="logo d-flex align-items-center w-100 ps-3 pe-3 ">
-            <img src="assets/img/logo.png" alt="" />
+            <img src="/assets/img/logo.png" alt="" />
             <span class="d-none d-lg-block">PM</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
